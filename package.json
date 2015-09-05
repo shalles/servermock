@@ -1,0 +1,34 @@
+{
+    "name": "servermock",
+    "version": "1.0.0",
+    "description": "fepro server and mock module",
+    "main": "index.js",
+    "bin": "./bin/cmd.js",
+    "scripts": {
+        "test": "fepro -s mock"
+    },
+    "keywords": [
+        "fepro",
+        "server",
+        "mock",
+        "mockjson"
+    ],
+    "files": [        
+        "index.js",
+        "src",
+        "bin"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/shalles/servermock.git"
+    },
+    "bugs": {
+        "url": "https://github.com/shalles/servermock/issues"
+    },
+    "author": {
+        "name": "shalles",
+        "email": "shalles@163.com",
+        "url": "http://shalles.github.io"
+    },
+    "license": "MIT"
+}
