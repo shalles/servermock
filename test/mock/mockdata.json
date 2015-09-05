@@ -2,8 +2,8 @@
     "errno": 0,
     "data": [{
         "id": "4234",
-        "name": "@MNAME",
+        "name": "@MNAME json不会识别自定义随机变量",
         "address": "special a froz value",
-        "city": "@MCITY"
+        "city": "@MCITY mjson会识别变量MCITY随机替换"
     }]
 }

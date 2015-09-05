@@ -47,13 +47,52 @@ servermock(config); // or use default config
 
 support mockjson(.mjson) json(.json) function(req, res)(.js)
 
-**.mjson**
+**.json**
 
-```js
+```json
+{
+    "errno": 0,
+    "data": [
+        {
+            "id": 1,
+            "name": "shalles"
+        },{
+            "id": 2,
+            "name": "shalles2"
+        },{
+            "id": 3,
+            "name": "shalles3"
+        }
+    ]
+}
 
 ```
 
-**.mockrc**
+**.mjson**
+
+```js
+{
+    "errno": 0,
+    "data|1-10": [{
+        "uid|0-1000": 1,
+        "name": "@MNAME",
+        "age|10-99": 0,
+        "city": "@MCITY"
+    }]
+}
+
+```
+generate<br>
+data [1, 10]<br>
+uid betoween 0 and 1000<br>
+age betoween 10 and 99<br>
+random MNAME in .mockrc "MNAME": ["shalles", "东阳", "小明", "小梅", "乔治"]<br>
+
+more [ http://mockjs.com/#语法规范 ] (http://mockjs.com/#语法规范)
+
+**.mockrc自定义mockjson随机变量**
+
+除了默认的还提供自定义随机变量(*.mjson)
 
 ```json
 {
@@ -62,4 +101,4 @@ support mockjson(.mjson) json(.json) function(req, res)(.js)
 }
 ```
 
-detail look [  ]()
+more [ https://github.com/shalles/servermock/tree/master/test ](https://github.com/shalles/servermock/tree/master/test)
