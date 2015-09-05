@@ -5,7 +5,7 @@
     "main": "index.js",
     "bin": "./bin/cmd.js",
     "scripts": {
-        "test": "fepro -s mock"
+        "test": "servermock start"
     },
     "keywords": [
         "fepro",
@@ -15,7 +15,7 @@
     ],
     "files": [        
         "index.js",
-        "src",
+        "lib",
         "bin"
     ],
     "repository": {

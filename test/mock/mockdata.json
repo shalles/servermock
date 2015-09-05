@@ -1,0 +1,9 @@
+{
+    "errno": 0,
+    "data": [{
+        "id": "4234",
+        "name": "@MNAME",
+        "address": "special a froz value",
+        "city": "@MCITY"
+    }]
+}
