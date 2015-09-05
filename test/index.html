@@ -9,9 +9,18 @@
     <div id="msg"></div>
     <script src="./zepto.min.js"></script>
     <script>
-        msg.innerHTML = ""
-        $.ajax({
-            url
+            $.ajax({
+            url: '/com/api/mockdata.do',
+            dataType: 'json',
+            success:function(data){
+                if(data['errno'] === 0){
+                    msg.innerHTML = JSON.stringify(data["data"]);
+                    console.log(JSON.stringify(data["data"]))
+                }
+            },
+            error:function(data){
+                alert('error' + JSON.stringify(data));
+            }
         })
     </script>
 </body>
