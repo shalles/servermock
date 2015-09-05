@@ -1,6 +1,6 @@
 {
   "name": "servermock",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "fepro server and mock module",
   "main": "index.js",
   "bin": "./bin/cmd.js",
