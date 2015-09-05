@@ -21,21 +21,34 @@ sm.config josn file in the project root or start path
 ```json
 {
     "port": 8080,
-    "protocol": 'http or https', //https\
+    "protocol": "http", //https
     "key": "~/cert/cert.key",
     "cert": "~cert/cert.crt",
     // mock请求
     "mock":{
         "datapath": "mock/",
-        "mockrc": ".mockrc", //相对mock datapath
+        "mockrc": ".mockrc", //如果不是绝对路径则相对mock datapath
         "regexurl": { //前面是regex new RegExp()
             "/api/mockdata1" : "mockdata.js", //走js 遵循cmd
-            "/api/mockdata1" : "mockdata.json", //
-            "/api/mockdata" : "mockdata.mjson" //
+            "/api/mockdata1" : "mockdata.json", //json数据返回
+            "/api/mockdata" : "mockdata.mjson" //mockjson数据返回
         }
     },
 }
 ```
+sm.config标准json  使用时去掉文件中去掉注释
+
+the file is standard json widthout comment <br>
+protocol: http/https <br>
+when https you should give the value of key and cert
+
+mock.datapath is the mock data root <br>
+mock.regexurl{name:value} <br>
+name: match mock url, support regex <br>
+value: match data file path relative datapath
+
+
+
 **or**
 
 ```js
@@ -101,4 +114,6 @@ more [ http://mockjs.com/#语法规范 ] (http://mockjs.com/#语法规范)
 }
 ```
 
-more [ https://github.com/shalles/servermock/tree/master/test ](https://github.com/shalles/servermock/tree/master/test)
+###more please look the tese demo 
+
+[ https://github.com/shalles/servermock/tree/master/test ](https://github.com/shalles/servermock/tree/master/test)
