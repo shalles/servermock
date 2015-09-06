@@ -15,7 +15,7 @@
             success:function(data){
                 if(data['errno'] === 0){
                     msg.innerHTML = JSON.stringify(data["data"]);
-                    console.log(JSON.stringify(data["data"]))
+                    console.log(data["data"])
                 }
             },
             error:function(data){

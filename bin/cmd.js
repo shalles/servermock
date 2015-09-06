@@ -20,17 +20,18 @@ if(cmd == 'start'){
 } else {
     console.log('--------------------servermock-------------------\n',
                 '$ servermock start 启动\n', 
+                'git: https://github.com/shalles/servermock/\n',
                 '===配置文件===build path下.smrc文件, 格式如下:\n', 
                 {
-                    port: 8080,
-                    protocol: 'http or https', //https\
-                    key: "~/cert/cert.key",
-                    cert: "~cert/cert.crt",
+                    "port": 8080,
+                    "protocol": "http or https", //https\
+                    "key": "~/cert/cert.key",
+                    "cert": "~cert/cert.crt",
                     // mock请求
-                    mock:{
-                        datapath: "mock/",
-                        mockrc: ".mockrc", //相对mock datapath
-                        regexurl: { //前面是regex new RegExp()
+                    "mock":{
+                        "datapath": "mock/",
+                        "mockrc": ".mockrc", //相对mock datapath
+                        "regexurl": { //前面是regex new RegExp()
                             "/api/placesuggestion" : "placesuggestion.js", //走js 遵循cmd
                             "/api/placesuggestion" : "placesuggestion.json", //
                             "/api/placesuggestion" : "placesuggestion.mjson" //
