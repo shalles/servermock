@@ -128,6 +128,6 @@ more [ http://mockjs.com/#语法规范 ] (http://mockjs.com/#语法规范)
 }
 ```
 
-###more please look the tese demo 
+###more please look the test demo 
 
 [ https://github.com/shalles/servermock/tree/master/test ](https://github.com/shalles/servermock/tree/master/test)
