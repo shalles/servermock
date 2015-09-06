@@ -22,8 +22,9 @@ sm.config josn file in the project root or start path
 {
     "port": 8080,
     "protocol": "http", //https
-    "key": "~/cert/cert.key",
-    "cert": "~cert/cert.crt",
+    "key": "~/cert/cert.key", // if https
+    "cert": "~cert/cert.crt", // for https
+    "main": "index.html", // relative to root such http://127.0.0.1:8080/index.html
     // mock请求
     "mock":{
         "datapath": "mock/",

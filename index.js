@@ -12,6 +12,7 @@ function servermock(config){
         protocol: 'http', //https\
         // key: "~/cert/cert.key",
         // cert: "~cert/cert.crt",
+        "main": "",
         // mock请求
         mock:{
             datapath: "mock/",
@@ -31,6 +32,7 @@ function servermock(config){
 
     config.mock.datapath = path.isAbsolute(mockpath) ? mockpath : path.resolve(buildPath, mockpath);
     config.mock.mockrc = path.isAbsolute(mockrc) ? mockrc : path.join(config.mock.datapath, mockrc);
+    config.main = config.main[0] !== '\/' ? '\/' + config.main : config.main;
     // console.log("-------mockrc\n", config.mock.datapath, '\n', mockrc, '\n', path.join(config.mock.datapath, mockrc));
     server(config);
 }
