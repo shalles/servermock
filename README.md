@@ -1,7 +1,7 @@
 # servermock
 node static server and mock data
 
-###Install
+### Install
 
 ```
 sudo npm install servermock -g  
@@ -14,7 +14,7 @@ npm install servermock --save
 require('servermock')
 ```
 
-###Config
+### Config
 
 sm.config josn file in the project root or start path
 
@@ -56,7 +56,7 @@ var servermock = require('servermock');
 servermock(config); // or use default config
 ```
 
-###Mock
+### Mock
 
 support mockjson(.mjson) json(.json) function(req, res)(.js)
 
@@ -128,6 +128,6 @@ more [ http://mockjs.com/#语法规范 ] (http://mockjs.com/#语法规范)
 }
 ```
 
-###more please look the test demo 
+### more please look the test demo 
 
 [ https://github.com/shalles/servermock/tree/master/test ](https://github.com/shalles/servermock/tree/master/test)
