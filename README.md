@@ -113,6 +113,7 @@ data [1, 10]<br>
 uid betoween 0 and 1000<br>
 age betoween 10 and 99<br>
 random MNAME in .mockrc "MNAME": ["shalles", "东阳", "小明", "小梅", "乔治"]<br>
+so name is one of ["shalles", "东阳", "小明", "小梅", "乔治"], so as city
 
 more [ http://mockjs.com/#语法规范 ] (http://mockjs.com/#语法规范)
 
