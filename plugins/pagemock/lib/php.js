@@ -1,8 +1,6 @@
 var fs = require('fs'),
     php = require('phpjs'),
-    path = require('path'),
-    // pagejs = require("pagejs"),
-    utils = require("../utils.js");
+    path = require('path');
 
 
 // php = utils.extend(php, {
