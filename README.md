@@ -1,9 +1,24 @@
 # servermock
 node static server and mock data
 
+version `1.0.11`
++增加插件支持 support plugin <br>
++pagemock plugin <br>
+pagemock now support: <br>
+most velocity template grammar <br>  
+bits of php grammar like <br>
+
+```php
+<?php echo is_null($variable)? "": "<em>".$variable. "</em>元"; ?>
+<?php  echo $var; ?>
+...
+```
+
+support most function, variable and bits of logic expression
+
 ### Install
 
-```
+```shell
 sudo npm install servermock -g  
 
 //启动命令(start)
@@ -48,6 +63,17 @@ mock.regexurl{name:value} <br>
 name: match mock url, support regex <br>
 value: match data file path relative datapath
 
+**Directory**
+
+builddir or start server directory
+--mock/ <br>
+----.mockrc <br>
+----mockdata.js <br>
+----mockdata.json <br>
+----mockdata.mjson <br>
+----... <br>
+--src <br>
+--sm.config <br>
 
 
 **or**
@@ -164,8 +190,61 @@ more [ http://mockjs.com/#语法规范 ] (http://mockjs.com/#语法规范)
 
 # page mock
 
+**Directory**
 
+builddir <br>
+... <br>
+--pagedir <br>
+----page1.php <br>
+----page1.json / page1.mjson <br>
+----page2.vm <br>
+----page2.json / page2.mjson <br>
+----... <br>
+--... <br>
 
-### more please look the test demo 
+*such*
+
+page1.php
+
+```php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PHP page</title>
+</head>
+<body>
+    <div><span>name:</span> <?php $name ?></div>
+    <div><span>age:</span> <?php $age; ?></div>
+    <?php echo "show your info";?>
+    <br>
+    <?php echo is_null($show): "default": $show;?>
+    <div>
+        <?php echo is_null($variable)? "": "<em>".$variable. "</em>元"; ?>
+    </div>
+</body>
+</html>
+```
+page1.json
+
+```json
+{
+    "$name": "shalles",
+    "$age": 18,
+    "show": null
+}
+```
+
+page1.mjson
+
+```json
+{
+    "name": "shalles",
+    "age|18-20": 18,
+    "show|0-1": "I will support php, python, jsp and so on"
+}
+```
+
+# more please look the test demo 
 
 [ https://github.com/shalles/servermock/tree/master/test ](https://github.com/shalles/servermock/tree/master/test)
