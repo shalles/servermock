@@ -63,10 +63,43 @@ support mockjson(.mjson) json(.json) function(req, res)(.js)
 
 **.js**
 
+
 ```js
 function(req, res){
+    // req.headers: { 
+    //    host: '127.0.0.1:8080',
+    //    connection: 'keep-alive',
+    //    accept: 'application/json, text/javascript, */*; q=0.01',
+    //    'x-requested-with': 'XMLHttpRequest',
+    //    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36',
+    //    referer: 'http://127.0.0.1:8080/src/export/pages/app-1.html',
+    //    'accept-encoding': 'gzip, deflate, sdch',
+    //    'accept-language': 'zh-CN,zh;q=0.8,en;q=0.6,tr;q=0.4,ja;q=0.2',
+    //    cookie: '_ga=GA1.1.412069457.1440574551',
+    //    'ra-ver': '3.0.7',
+    //    'ra-sid': 'D397FW#5-20150603-021623-afsadf-asfew' 
+    // }
+    // req.method: 'GET',
+    // req.wwwurl: { 
+    //     protocol: 'http:',
+    //     slashes: true,
+    //     auth: null,
+    //     host: '127.0.0.1:8080',
+    //     port: '8080',
+    //     hostname: '127.0.0.1',
+    //     hash: null,
+    //     search: '?city=%E5%8C%97%E4%&query=d',
+    //     query: 'city=%E5%8C%97%E4%&query=d',
+    //     pathname: '/api/placesuggestion',
+    //     path: '/api/placesuggestion?city=%E5%8C%97%E4%&query=d',
+    //     href: 'http://127.0.0.1:8080/api/placesuggestion?city=%E5%8C%97%E4%&query=d' 
+    //     queryObj:{ 
+    //         city: '北京市',
+    //         query: 'd' 
+    //     }
+    // }
     console.log("req:", req);
-    console.log("res:", res);
+    //console.log("res:", res);
     var data = {"errno":0,"data":[1,2,3,4,5,6,7,8,'a','b','c','d']};
     data['data'] = data['data'].slice(Math.random(1)*8)
     
