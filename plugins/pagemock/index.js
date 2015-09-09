@@ -5,13 +5,16 @@ var fs = require('fs'),
     php = require('./lib/php.js'),
     vmjs = require('./lib/vm.js');
 
+
 console.log("enter into plugin")
 module.exports = function(parmas){
     utils.log("file enter plugin and ext:" + parmas.ext, parmas.filepath);
     if (['php', 'html', 'vm', 'jsp'].indexOf(parmas.ext) > -1){
 
         //log("handle file", parmas.filepath);
-        var jsonpath = parmas.filepath.slice(0, - parmas.ext.length),
+        var jsonpath = parmas.mockpath ? path.join(parmas.mockpath, 
+                            path.basename(parmas.filepath).slice(0, - parmas.ext.length)) : 
+                            parmas.filepath.slice(0, - parmas.ext.length),
             jsonData = utils.readJson(jsonpath + 'json') || parmas.getMockJsonData(utils.readJson(jsonpath + 'mjson') || {});
 
         var regx = /<\?(?:(?:php\s+echo)|=)\s*([^;]|[$\w_\d()? :]+);*\s*\?>/g;///<\?php\s+echo\s*([^;]|[$\w_\d()? :]+);*\s*\?>/;///<\?php\s+echo\s*([^;]|[$\w_\d]+);*\s*\?>/g;

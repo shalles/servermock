@@ -43,6 +43,7 @@ sm.config josn file in the project root or start path
     // mock请求
     "mock":{
         "datapath": "mock/",
+        "pagepath": "", //page mock data path, default same as page file with .json or .mjson
         "mockrc": ".mockrc", //如果不是绝对路径则相对mock datapath
         "ignore": ["jpg", "png", "gif", "html", "js", "css"], //default value
         "regexurl": { //前面是regex new RegExp()
@@ -60,6 +61,7 @@ protocol: http/https <br>
 when https you should give the value of key and cert
 
 mock.datapath is the mock data root <br>
+mock.pagepath is page mock data path, default same as page file with .json or .mjson extname<br>
 mock.regexurl{name:value} <br>
 name: match mock url, support regex <br>
 value: match data file path relative datapath
