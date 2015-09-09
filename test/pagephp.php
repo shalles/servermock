@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PHP page</title>
+    <title>PHP page mock</title>
 </head>
 <body>
+    <h2>PHP page mock</h2>
     <div><span>name:</span> <?php echo $name ?></div>
     <div><span>age:</span> <?php echo $age; ?></div>
     <?php echo "show your info";?>

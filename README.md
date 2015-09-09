@@ -44,7 +44,7 @@ sm.config josn file in the project root or start path
     "mock":{
         "datapath": "mock/",
         "mockrc": ".mockrc", //如果不是绝对路径则相对mock datapath
-        "ignore": ['jpg', 'png', 'gif', 'html', 'js', 'css'], //default value
+        "ignore": ["jpg", "png", "gif", "html", "js", "css"], //default value
         "regexurl": { //前面是regex new RegExp()
             "/api/mockdata1" : "mockdata.js", //走js 遵循cmd
             "/api/mockdata1" : "mockdata.json", //json数据返回
@@ -250,6 +250,6 @@ page1.mjson
 }
 ```
 
-# more please look the test demo 
+# more in test demo 
 
 [ https://github.com/shalles/servermock/tree/master/test ](https://github.com/shalles/servermock/tree/master/test)
