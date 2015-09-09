@@ -2,6 +2,9 @@
 node static server and mock data
 
 **version `1.0.14`** <br>
+fix 中文 path
+
+**version `1.0.14`** <br>
 增加pagemock data file config
 
 **version `1.0.11`** <br>
