@@ -36,6 +36,7 @@
   "dependencies": {
     "mockjs": "^0.1.10",
     "phpjs": "^1.3.2",
+    "urlencode": "^1.1.0",
     "velocityjs": "^0.7.0"
   }
 }
