@@ -10,6 +10,6 @@
     <div>age: <span>$age</span></div>
     #if($show)
         <div>$show</div>
-    #endif
+    #end
 </body>
 </html>

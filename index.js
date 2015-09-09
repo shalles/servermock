@@ -17,6 +17,7 @@ function servermock(config){
         mock:{
             datapath: "mock/",
             mockrc: ".mockrc", //相对mock datapath
+            //ignore: [],
             regexurl: { //前面是regex new RegExp()
                 // "/api/placesuggestion" : "placesuggestion.js", //走js 遵循cmd
                 // "/api/placesuggestion" : "placesuggestion.json", //

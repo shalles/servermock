@@ -35,10 +35,10 @@ module.exports = function(parmas){
                     //parmas.cnt = 
                     return parmas.cnt.replace(regx, function($0, $1){
                         var re;
-                        utils.log("match: " + $1);
+                        // utils.log("match: " + $1);
 
                         $1 = $1.replace(/"\s*(\.)\s*(\$[\w\d_]+)\s*(?:(\.)\s*")*/g, function($0, $1, $2, $3){
-                            utils.log('" + ' + $2 + ($3 ? ' + "': ''))
+                            // utils.log('" + ' + $2 + ($3 ? ' + "': ''))
                             return '" + ' + $2 + ($3 ? ' + "': '');
                         });
 
@@ -48,8 +48,12 @@ module.exports = function(parmas){
                             sandbox[mi] === undefined && (sandbox[mi] = '');
                         }
                         
-                        utils.log("convert match", $1);
-                        re = vm.runInNewContext($1, sandbox);
+                        // utils.log("convert match", $1);
+                        try{
+                            re = vm.runInNewContext($1, sandbox);
+                        } catch(err){
+                            utils.log(err);
+                        }
                         return re;
                     });
                     // console.log(parmas.cnt)

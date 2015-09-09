@@ -5,10 +5,10 @@
     <title>PHP page</title>
 </head>
 <body>
-    <div><span>name:</span> <?php $name ?></div>
-    <div><span>age:</span> <?php $age; ?></div>
+    <div><span>name:</span> <?php echo $name ?></div>
+    <div><span>age:</span> <?php echo $age; ?></div>
     <?php echo "show your info";?>
     <br>
-    <?php is_null($show): "default": $show;?>
+    <?php echo is_null($show)? "default": $show;?>
 </body>
 </html>

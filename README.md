@@ -44,6 +44,7 @@ sm.config josn file in the project root or start path
     "mock":{
         "datapath": "mock/",
         "mockrc": ".mockrc", //如果不是绝对路径则相对mock datapath
+        "ignore": ['jpg', 'png', 'gif', 'html', 'js', 'css'], //default value
         "regexurl": { //前面是regex new RegExp()
             "/api/mockdata1" : "mockdata.js", //走js 遵循cmd
             "/api/mockdata1" : "mockdata.json", //json数据返回
@@ -124,6 +125,10 @@ function(req, res){
     //         query: 'd' 
     //     }
     // }
+    // 对.js .css等重定向等
+    // res.statusCode = 302;
+    // res.setHeader("Location", "http://127.0.0.1:8088" + req.url);
+    // res.end();
     console.log("req:", req);
     //console.log("res:", res);
     var data = {"errno":0,"data":[1,2,3,4,5,6,7,8,'a','b','c','d']};
