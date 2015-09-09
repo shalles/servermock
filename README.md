@@ -1,12 +1,15 @@
 # servermock
 node static server and mock data
 
-version `1.0.11`
+**version `1.0.14`** <br>
+增加pagemock data file config
+
+**version `1.0.11`** <br>
 +增加插件支持 support plugin <br>
 +pagemock plugin <br>
 pagemock now support: <br>
 most velocity template grammar <br>  
-bits of php grammar like <br>
+bits of php grammar like
 
 ```php
 <?php echo is_null($variable)? "": "<em>".$variable. "</em>元"; ?>
@@ -16,7 +19,7 @@ bits of php grammar like <br>
 
 support most function, variable and bits of logic expression
 
-### Install
+## Install
 
 ```shell
 sudo npm install servermock -g  
@@ -29,7 +32,7 @@ npm install servermock --save
 require('servermock')
 ```
 
-### Config
+## Config
 
 sm.config josn file in the project root or start path
 
@@ -195,7 +198,40 @@ more [ http://mockjs.com/#语法规范 ] (http://mockjs.com/#语法规范)
 }
 ```
 
-# page mock
+## test file
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>servermock test demo</title>
+</head>
+<body>
+    <h2>show servermock server and mock data commond+R or F5 refresh this page</h2>
+    <div id="msg"></div>
+    <script src="./zepto.min.js"></script>
+    <script>
+        $.ajax({
+            url: '/com/api/mockdata.do',
+            dataType: 'json',
+            success:function(data){
+                if(data['errno'] === 0){
+                    msg.innerHTML = JSON.stringify(data["data"]);
+                    console.log(data["data"])
+                }
+            },
+            error:function(data){
+                alert('error' + JSON.stringify(data));
+            }
+        })
+    </script>
+</body>
+</html>
+```
+
+
+## page mock
 
 **Directory**
 
@@ -252,6 +288,6 @@ page1.mjson
 }
 ```
 
-# more in test demo 
+## more look test demo 
 
 [ https://github.com/shalles/servermock/tree/master/test ](https://github.com/shalles/servermock/tree/master/test)
