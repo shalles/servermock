@@ -1,7 +1,7 @@
 var fs = require('fs'),
     vm = require('vm'),
     path = require('path'),
-    utils = require('../../lib/utils'),
+    utils = require('../../../lib/utils'),
     php = require('./lib/php.js'),
     vmjs = require('./lib/vm.js');
 
@@ -11,7 +11,7 @@ module.exports = function(parmas){
     if (['php', 'html', 'vm', 'jsp'].indexOf(parmas.ext) > -1){
         utils.log("file enter plugin and ext:" + parmas.ext, parmas.filepath);
         //log("handle file", parmas.filepath);
-        var jsonpath = parmas.mockpath ? path.join(parmas.mockpath, 
+        var jsonpath = parmas.mockpath.pagepath ? path.join(parmas.mockpath.pagepath,
                             path.basename(parmas.filepath).slice(0, - parmas.ext.length)) : 
                             parmas.filepath.slice(0, - parmas.ext.length),
             jsonData = utils.readJson(jsonpath + 'json') || parmas.getMockJsonData(utils.readJson(jsonpath + 'mjson') || {});

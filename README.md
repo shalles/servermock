@@ -1,7 +1,7 @@
 # servermock
 node static server and mock data
 
-**version `1.0.14`** <br>
+**version `1.0.15`** <br>
 fix 中文 path
 
 **version `1.0.14`** <br>
@@ -288,6 +288,45 @@ page1.mjson
     "name": "shalles",
     "age|18-20": 18,
     "show|0-1": "I will support php, python, jsp and so on"
+}
+```
+
+## Plugin
+
+```js
+$ mkdir ~/.servermock/plugins
+$ cd ~/.servermock/plugins
+$ mkdir fc (or ... now just support fc) 
+$ cd fc
+$ mkdir yourplugin
+$ cd yourplugin
+$ vim index.js
+```
+**plugin pagemock**
+
+```js
+var fs = require('fs'),
+    vm = require('vm'),
+    path = require('path'),
+    utils = require('../../../lib/utils'),
+    php = require('./lib/php.js'),
+    vmjs = require('./lib/vm.js');
+
+// console.log("enter into plugin")
+module.exports = function(parmas){
+    //do something    
+    //
+    //parms ={
+    //    cnt: file, //string
+    //    stat: fdStat, //stat
+    //    ext: extname, //string such js html
+    //    config: config // object
+    //    filepath: pathname, //string
+    //    mockpath: config.mock, //object
+    //    getMockJsonData: mock.getMockJsonData //function parma is mockjson data return common json
+    //                                          //such parmas.getMockJsonData(utils.readJson(jsonpath + 'mjson') || {})
+    //}
+    //return parms.cnt
 }
 ```
 
