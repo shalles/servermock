@@ -329,6 +329,7 @@ module.exports = function(parmas){
     //return parms.cnt
 }
 ```
+plugin example [ https://github.com/shalles/servermock/tree/master/plugins/fc/pagemock ](https://github.com/shalles/servermock/tree/master/plugins/fc/pagemock)
 
 ## more look test demo 
 
