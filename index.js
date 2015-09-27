@@ -27,7 +27,7 @@ function servermock(config){
         },
     };
 
-    config = utils.extend(dft, config);
+    config = utils.extend(true, dft, config);
 
     var mockpath = config.mock.datapath,
         pagepath = config.mock.pagepath,
