@@ -12,6 +12,9 @@ function servermock(config){
         protocol: 'http', //https\
         // key: "~/cert/cert.key",
         // cert: "~cert/cert.crt",
+        websocket: {
+            open: false
+        },
         "main": "",
         // mock请求
         mock:{
