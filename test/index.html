@@ -7,9 +7,14 @@
 <body>
     <h2>show servermock server and mock data commond+R or F5 refresh this page</h2>
     <div id="msg"></div>
+    <div>
+        <input type="text" name="ipt" id="ipt">
+        <textarea name="opt" id="opt" cols="30" rows="10"></textarea>
+    </div>
     <script src="./zepto.min.js"></script>
+    <script src="./webket.js"></script>
     <script>
-            $.ajax({
+        $.ajax({
             url: '/com/api/mockdata.do',
             dataType: 'json',
             success:function(data){
@@ -22,6 +27,9 @@
                 alert('error' + JSON.stringify(data));
             }
         })
+    </script>
+    <script>
+        
     </script>
 </body>
 </html>
