@@ -1,7 +1,7 @@
 var net = require('net');
 var client = new net.Socket();
 var host = '127.0.0.1',
-    port = 8880;
+    port = 8089;
 
 client.connect(port, host, function() {
 
