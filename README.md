@@ -1,6 +1,9 @@
 # servermock
 node static server and mock data
 
+**version `1.1.1`** <br>
+支持websocket
+
 **version `1.0.15`** <br>
 fix 中文 path
 
@@ -45,6 +48,15 @@ sm.config josn file in the project root or start path
     "protocol": "http", //https
     "key": "~/cert/cert.key", // if https
     "cert": "~cert/cert.crt", // for https
+    "websocket": {
+        "open": true, //default:false
+        "maxsize": 10485760, //10M default: 10M
+        "encoding": "utf8", //default: 'utf8'
+        "callback": "console.log('outside: ', data); return 'get data ' + data;", //function string
+        "originReg": "127.0.0.1", //new RegExp 服务接受原正则匹配 default:""
+        "broadcast": true, // 是否广播 default:true
+        "mTm": true //是否广播到自己 default:false
+    },
     "main": "index.html", // relative to root such http://127.0.0.1:8080/index.html
     // mock请求
     "mock":{
