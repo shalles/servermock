@@ -8,7 +8,7 @@ var fs = require('fs'),
 
 // console.log("enter into plugin")
 module.exports = function(parmas){
-    if (['php', 'html', 'vm', 'jsp'].indexOf(parmas.ext) > -1){
+    if (utils.inArray(parmas.ext, ['php', 'html', 'vm', 'jsp'])){
         utils.log("file enter plugin and ext:" + parmas.ext, parmas.filepath);
         //log("handle file", parmas.filepath);
         var jsonpath = parmas.mockpath.pagepath ? path.join(parmas.mockpath.pagepath,
