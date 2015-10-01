@@ -17,10 +17,10 @@ function syncTest(parmas){
 
     if(utils.inArray(ext, acceptExtname)){
         console.log('[synctest loading]');
-        var syncCommandTop = utils.readFile(path.join(__dirname, './lib/synccomm_top.min.js')),
-            syncCommandBottom = utils.readFile(path.join(__dirname, './lib/synccomm_bottom.min.js'));
+        var syncCommandTop = utils.readFile(path.join(__dirname, './lib/synccomm_top.min.js'));
+            // syncCommandBottom = utils.readFile(path.join(__dirname, './lib/synccomm_bottom.min.js'));
         cnt = cnt.replace(/<head>/, '<head>\n<meta charset="UTF-8">\n<script>' + syncCommandTop + '</script>');
-        cnt = cnt.replace(/<\/body>/, '<script>' + syncCommandBottom + '</script>\n</body>');
+        // cnt = cnt.replace(/<\/body>/, '<script>' + syncCommandBottom + '</script>\n</body>');
 
         return cnt;
     }
