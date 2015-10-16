@@ -2,6 +2,7 @@
 
 var fs = require('fs'),
     path = require('path'),
+    utils = require('../lib/utils.js'),
     servermock = require('../index.js');
 
 var cmd = process.argv[2],
@@ -11,7 +12,7 @@ if(cmd == 'start'){
     var config,
         configPath = path.join(cwd, 'sm.config');
 
-    config = fs.existsSync(configPath) ? JSON.parse(fs.readFileSync(configPath)): {};
+    config = utils.readJson(configPath) || {};
     console.log('--------------------servermock start-------------------\n',
                 '===config===\n', 
                 config);
