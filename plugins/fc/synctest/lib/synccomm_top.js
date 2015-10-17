@@ -97,15 +97,28 @@
 
         var selector = command.selector, ele, listeners;
             
-        if(!inList({ele: selector, type: command.type})) return;
+        if(inList({ele: selector, type: command.type}, notSendList)) return {};
 
         ele = selector === 'window' ? window : document.querySelector(selector); //通知值操作一个事件
         listeners = eventData[ele[eventDomID]][command.type];
 
         // 识别事件 执行不同的方法
-        switch(e.type){
+        switch(command.type){
             case 'input': 
-                ele.value = common.value;
+                ele.value = command.value;
+                break;
+            case 'focus':
+                ele.focus();
+                break;
+            case 'scroll':
+                ele.scrollTop ? 
+                    (ele.scrollTop = command.scrollTop, ele.scrollLeft = command.scrollLeft) :
+                    window.scrollTo(command.scrollLeft, command.scrollTop);
+                break;
+            case 'click': 
+                if(ele.tagName && ele.tagName.toLowerCase() === "a"){
+                    ele.href.indexOf("javascript") === -1 && (location.href = ele.href);
+                }
                 break;
             default:
                 break;
@@ -120,23 +133,33 @@
     // 建立通用指令
     function buildCommand(self, e) {
         var ele = self, // e.currentTarget,
+            // TODO: 选择器向上级精确到document
             selector = (ele === window) ? 'window' : 
-                        (ele === window.document) ? 'document' :
-                            (ele.tagName + "#" + ele.id + ((ele.classList && ele.classList.length) ? 
-                                "." + ele.classList.toString().split(' ').join('.') : ''));
+                    (ele === window.document) ? 'document' :
+                        (ele.tagName + (ele.id ? "#" + ele.id : "") + 
+                            ((ele.classList && ele.classList.length) ? 
+                            "." + ele.classList.toString().split(' ').join('.') : ''));
 
         var command = {
             selector: selector,
             type: e.type
         };
+
         // 识别事件 配置不同的数据
         switch(e.type){
             case 'input': 
                 command.value = ele.value;
                 break;
+            case 'scroll':
+                command.scrollTop = ele.scrollTop || scrollY;
+                command.scrollLeft = ele.scrollLeft || scrollX;
+                break;
+
             default:
                 break;
         }
+
+        console.log(command);
 
         return JSON.stringify(command);
     }
@@ -146,7 +169,7 @@
     }
     // 在当前页执行接收到的指令
     function excuteCommand(command) {
-        command.listeners.fire();
+        command.listeners && command.listeners.fire();
     }
 
     /**
@@ -158,16 +181,18 @@
     window.addEventListener =
         EventTarget.prototype.addEventListener = function(type, listener, useCapture) {
             var self = this;
+
+            //在元素上绑定一个对应ID
+            self[eventDomID] || (self[eventDomID] = ++eventID);
+
             // 组织并存储事件监听
             ((eventData[eventID] || (eventData[eventID] = {}))[type] ||
                 (eventData[eventID][type] = new Callbacks())).add(
                 function() {
                     // 用户监听
-                    listener.call(self, e);
+                    listener.call(self, window.event);
                 }
             );
-            
-            self[eventDomID] || (self[eventDomID] = ++eventID);
 
             var callback = function(e) {
                 
@@ -183,27 +208,27 @@
 
 
     // 重写addEventListener后为默认事件绑定监控
-    function regriteDefaultEventListener(target, evt) {
+    function rewriteDefaultEventListener(target, evt) {
         target.addEventListener(evt, function(e) {
             console.log(evt, e);
         }, false)
     }
 
-    function regriteDefaultEventListenerTargetList(tgtList, evt) {
+    function rewriteDefaultEventListenerTargetList(tgtList, evt) {
         for (var i = 0, len = tgtList.length; i < len; i++) {
-            regriteDefaultEventListener(tgtList[i], evt);
+            rewriteDefaultEventListener(tgtList[i], evt);
         }
     }
 
-    function regriteDefaultEventListenerEventList(target, evtList) {
+    function rewriteDefaultEventListenerEventList(target, evtList) {
         for (var i = 0, len = evtList.length; i < len; i++) {
-            regriteDefaultEventListener(target, evtList[i]);
+            rewriteDefaultEventListener(target, evtList[i]);
         }
     }
 
-    function regriteDefaultEventListenerList(tgtList, evtList) {
+    function rewriteDefaultEventListenerList(tgtList, evtList) {
         for (var i = 0, len = tgtList.length; i < len; i++) {
-            regriteDefaultEventListenerEventList(tgtList[i], evtList);
+            rewriteDefaultEventListenerEventList(tgtList[i], evtList);
         }
     }
     /**
@@ -212,17 +237,17 @@
     function initDefaultEvent(){
         
         // 'scroll', 'resize'
-        regriteDefaultEventListenerEventList(window, ['scroll', 'resize']);
+        rewriteDefaultEventListenerEventList(window, ['scroll', 'resize']);
 
         //link a
         var linkList = document.querySelectorAll('a');
-        linkList.length && regriteDefaultEventListenerTargetList(linkList, 'click');
+        linkList.length && rewriteDefaultEventListenerTargetList(linkList, 'click');
 
         // input: input textarea
         var inputs = document.querySelectorAll('input'),
             textarea = document.querySelectorAll('textarea');
 
-        inputs.length && regriteDefaultEventListenerList(inputs, ['input', 'focus']);
-        textarea.length && regriteDefaultEventListenerList(textarea, ['input', 'focus']);
+        inputs.length && rewriteDefaultEventListenerList(inputs, ['input', 'focus']);
+        textarea.length && rewriteDefaultEventListenerList(textarea, ['input', 'focus']);
     }
 })(window);
