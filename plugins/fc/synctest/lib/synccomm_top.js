@@ -1,7 +1,7 @@
 (function(window){
     window.__synctest = {};
 
-    var wsServer = 'ws://localhost:8080',
+    var wsServer = 'ws://192.168.1.6:8080',
         websocket = new WebSocket(wsServer);
     // window.addEventListener('DOMContentLoaded', function(){
     websocket.onopen = function(evt) {
@@ -124,6 +124,15 @@
                 break;
         }
 
+        switch(ele.tagName && ele.tagName.toLowerCase()){
+            case 'input': 
+                ele.value = command.value;
+                break;
+
+            default:
+                break;
+        }
+
         return {
             ele: ele,
             listeners: listeners
@@ -132,6 +141,7 @@
 
     // 建立通用指令
     function buildCommand(self, e) {
+        // 注意事件对象和target可能不是同一个
         var ele = self, // e.currentTarget,
             // TODO: 选择器向上级精确到document
             selector = (ele === window) ? 'window' : 
@@ -153,6 +163,15 @@
             case 'scroll':
                 command.scrollTop = ele.scrollTop || scrollY;
                 command.scrollLeft = ele.scrollLeft || scrollX;
+                break;
+
+            default:
+                break;
+        }
+
+        switch(ele.tagName && ele.tagName.toLowerCase()){
+            case 'input': 
+                command.value = ele.value;
                 break;
 
             default:
@@ -251,3 +270,10 @@
         textarea.length && rewriteDefaultEventListenerList(textarea, ['input', 'focus']);
     }
 })(window);
+
+// 功能清单
+// 1. 选择器尽可能选中唯一元素
+// 2. 增加更多默认事件的处理（history...）
+// 3. 
+
+// socket 支持指定域 移动设备等多平台需要
