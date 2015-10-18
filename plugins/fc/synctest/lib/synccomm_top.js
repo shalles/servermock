@@ -1,7 +1,7 @@
 (function(window){
     window.__synctest = {};
 
-    var wsServer = 'ws://192.168.1.6:8080',
+    var wsServer = 'ws://{{ origin }}',
         websocket = new WebSocket(wsServer);
     // window.addEventListener('DOMContentLoaded', function(){
     websocket.onopen = function(evt) {

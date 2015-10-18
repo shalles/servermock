@@ -9,6 +9,7 @@ var buildPath = process.cwd();
 function servermock(config){
     var dft = {
         port: 80,
+        hostname: "127.0.0.1",
         protocol: 'http', //https\
         // key: "~/cert/cert.key",
         // cert: "~cert/cert.crt",
