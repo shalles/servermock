@@ -1,4 +1,5 @@
-var fs = require('fs'),
+var os = require('os'),
+    fs = require('fs'),
     path = require('path'),
     utils = require('./lib/utils.js'),
     server = require('./lib/server.js');
@@ -30,6 +31,16 @@ function servermock(config){
             }
         },
     };
+
+    if(config.hostname === "0.0.0.0"){
+        var IP = os.networkInterfaces().en0
+        for(var i = 0, len = IP.length; i < len; i++){
+            if(IP[i].family === "IPv4"){
+                config.hostname = IP[i].address;
+                break;
+            }
+        }
+    }
 
     config = utils.extend(true, dft, config);
 
