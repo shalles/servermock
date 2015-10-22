@@ -1,6 +1,11 @@
 # servermock
 node static server and mock data
 
+**version `1.1.4`** <br>
+增加多设备同步测试功能 
+
+操作一个设备多个设备同步操作事件 
+
 **version `1.1.1`** <br>
 支持websocket
 
@@ -42,9 +47,10 @@ require('servermock')
 
 sm.config josn file in the project root or start path
 
-```json
+```js
 {
     "port": 8080,
+    "hostname": "0.0.0.0", //default 127.0.0.1 if 0.0.0.0 auto get IPv4
     "protocol": "http", //https
     "key": "~/cert/cert.key", // if https
     "cert": "~cert/cert.crt", // for https
@@ -55,7 +61,12 @@ sm.config josn file in the project root or start path
         "callback": "console.log('outside: ', data); return 'get data ' + data;", //function string
         "originReg": "127.0.0.1", //new RegExp 服务接受原正则匹配 default:""
         "broadcast": true, // 是否广播 default:true
-        "mTm": true //是否广播到自己 default:false
+        "mTm": true, //是否广播到自己 default:false
+        "synctest": {
+            "open": true, //开启多设备同步调试 
+            //"vpn": "192.168.1.6", // 默认使用server hostname
+            "exts": ["html", "php", "vm"] //需要同步测试的页面扩展
+        }
     },
     "main": "index.html", // relative to root such http://127.0.0.1:8080/index.html
     // mock请求
@@ -72,9 +83,9 @@ sm.config josn file in the project root or start path
     },
 }
 ```
-sm.config标准json  使用时去掉文件中去掉注释
+支持单行注释 多行注释暂不支持
+support simple line comments
 
-the file is standard json widthout comment <br>
 protocol: http/https <br>
 when https you should give the value of key and cert
 

@@ -24,7 +24,7 @@
      * author: shalles
      * email:shalles@163.com
      * create time: 2015.01.02
-     * refer to jquery callbacks 非完整简化版
+     * refer to jquery callbacks not all
      */
 
     function validateFn(fn) {
@@ -67,6 +67,9 @@
         }
     };
 
+    /**
+     * common
+     */
     function inArray(a , arr){
         return arr.indexOf(a) > -1;
     }
@@ -78,10 +81,6 @@
         }
         return false;
     }
-    
-    /**
-     * 公共方法部分
-     */
 
     var eventData = {},
         eventID = 0,
@@ -91,18 +90,25 @@
             type:['DOMContentLoaded', 'load']
         }];
 
-    // 解析指令
+    function buildCurrentEventObject(evt, tgt){
+        evt.target = tgt;
+
+        return evt;
+    }
+
     function parseCommand(command) {
         command = JSON.parse(command);
 
-        var selector = command.selector, ele, listeners;
+        var ele, listeners, evt = {}, selector = command.selector;
             
         if(inList({ele: selector, type: command.type}, notSendList)) return {};
 
-        ele = selector === 'window' ? window : document.querySelector(selector); //通知值操作一个事件
+        ele = selector === 'window' ? window : document.querySelector(selector); 
         listeners = eventData[ele[eventDomID]][command.type];
 
-        // 识别事件 执行不同的方法
+        buildCurrentEventObject(evt, ele);
+
+        // TODO: add more
         switch(command.type){
             case 'input': 
                 ele.value = command.value;
@@ -134,16 +140,17 @@
         }
 
         return {
+            event: evt,
+            type: command.type,
             ele: ele,
             listeners: listeners
         }
     }
 
-    // 建立通用指令
     function buildCommand(self, e) {
-        // 注意事件对象和target可能不是同一个
+
         var ele = self, // e.currentTarget,
-            // TODO: 选择器向上级精确到document
+            // TODO: recognize more detail to root or select by ID
             selector = (ele === window) ? 'window' : 
                     (ele === window.document) ? 'document' :
                         (ele.tagName + (ele.id ? "#" + ele.id : "") + 
@@ -155,7 +162,7 @@
             type: e.type
         };
 
-        // 识别事件 配置不同的数据
+        // TODO: add more
         switch(e.type){
             case 'input': 
                 command.value = ele.value;
@@ -182,43 +189,47 @@
 
         return JSON.stringify(command);
     }
-    // 广播指令 实际由websocket server 端执行广播 由servermock websocket部分synccomm插件完成
+
     function sendCommand(command) {
          (websocket.readyState === 1) && websocket.send(command);
     }
-    // 在当前页执行接收到的指令
+
     function excuteCommand(command) {
-        command.listeners && command.listeners.fire();
+        var ele, type, event, listener;
+
+        if(!(ele = command.ele)) return;
+        
+        type = "__synctest_event",
+        event = new Event(type);
+        listener = function(e){
+            e.preventDefault();
+            command.listeners && command.listeners.fire(e);
+        }
+        originAddEventListener.call(ele, type, listener);
+        ele.dispatchEvent(event);
+        ele.removeEventListener(type, listener);
     }
 
-    /**
-     * addEventListener
-     * 重写时间监听 组织websocket(由buildCommand部分完成)并发送指令
-     */
     var originAddEventListener = EventTarget.prototype.addEventListener;
 
     window.addEventListener =
         EventTarget.prototype.addEventListener = function(type, listener, useCapture) {
             var self = this;
 
-            //在元素上绑定一个对应ID
             self[eventDomID] || (self[eventDomID] = ++eventID);
 
-            // 组织并存储事件监听
             ((eventData[eventID] || (eventData[eventID] = {}))[type] ||
                 (eventData[eventID][type] = new Callbacks())).add(
-                function() {
-                    // 用户监听
-                    listener.call(self, window.event);
+                function(e) {
+                    e.preventDefault();
+                    listener.call(self, e);
                 }
             );
 
             var callback = function(e) {
                 
-                // 组织并发送指令
                 sendCommand(buildCommand(this, e));
 
-                // 用户监听 广播不发给自己 保证当前操作平台无延迟
                 listener.call(this, e);
             }
 
@@ -226,7 +237,6 @@
         }
 
 
-    // 重写addEventListener后为默认事件绑定监控
     function rewriteDefaultEventListener(target, evt) {
         target.addEventListener(evt, function(e) {
             console.log(evt, e);
@@ -250,9 +260,7 @@
             rewriteDefaultEventListenerEventList(tgtList[i], evtList);
         }
     }
-    /**
-     * 处理默认事件
-     */
+    
     function initDefaultEvent(){
         
         // 'scroll', 'resize'
@@ -270,10 +278,3 @@
         textarea.length && rewriteDefaultEventListenerList(textarea, ['input', 'focus']);
     }
 })(window);
-
-// 功能清单
-// 1. 选择器尽可能选中唯一元素
-// 2. 增加更多默认事件的处理（history...）
-// 3. 
-
-// socket 支持指定域 移动设备等多平台需要
