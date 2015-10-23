@@ -1,6 +1,15 @@
 (function(window){
     window.__synctest = {};
 
+    var eventData = {},
+        eventID = 0,
+        eventDomID = 'synccommand_' + new Date().getTime(),
+        notSendList = [{ 
+            ele: ['window', 'document'],
+            type:['DOMContentLoaded', 'load']
+        }];
+    
+
     var wsServer = 'ws://{{ origin }}',
         websocket = new WebSocket(wsServer);
     // window.addEventListener('DOMContentLoaded', function(){
@@ -70,6 +79,7 @@
     /**
      * common
      */
+
     function inArray(a , arr){
         return arr.indexOf(a) > -1;
     }
@@ -81,14 +91,6 @@
         }
         return false;
     }
-
-    var eventData = {},
-        eventID = 0,
-        eventDomID = 'synccommand_' + new Date().getTime(),
-        notSendList = [{ 
-            ele: ['window', 'document'],
-            type:['DOMContentLoaded', 'load']
-        }];
 
     function buildCurrentEventObject(evt, tgt){
         evt.target = tgt;
@@ -126,6 +128,30 @@
 
         return selectList.reverse().join('>');
     }
+
+    function throttlePlus(fn, delay, operatDelay) {
+        var timer, start;
+        delay = operatDelay < delay ? delay : operatDelay;//必须让动画播放完
+        return function () {
+            var self = this, cur = new Date(), args = arguments;
+            clearTimeout(timer);
+            start || (start = cur);
+            //超时后直接执行保持连贯
+            if (operatDelay <= cur - start) {
+                fn.apply(self, args);
+                start = cur;
+            }
+            else {
+                timer = setTimeout(function () {
+                    fn.apply(self, args)
+                }, delay);
+            }
+        }
+    }
+
+    var throttleScroll = throttlePlus(function(self, e){
+        sendCommand(buildCommand(self, e));
+    }, 150, 200);
 
     function parseCommand(command) {
         command = JSON.parse(command);
@@ -218,7 +244,8 @@
     }
 
     function sendCommand(command) {
-         (websocket.readyState === 1) && websocket.send(command);
+
+        command !== '' && (websocket.readyState === 1) && websocket.send(command);
     }
 
     function excuteCommand(command) {
@@ -254,9 +281,13 @@
             );
 
             var callback = function(e) {
-                
-                sendCommand(buildCommand(this, e));
+
+                (e.type === 'scroll2') ?
+                    throttleScroll(this, e):
+                    sendCommand(buildCommand(this, e));
+
                 listener.call(this, e);
+
                 e.preventDefault();
             }
 
