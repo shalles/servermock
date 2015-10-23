@@ -76,6 +76,72 @@
         }
     };
 
+    function extend(){
+        var iterator = {
+            stack: [],
+            reset: function(){
+                stack = [];
+            },
+            watch:function(co, cb){ // co object or array
+                if(this.stack.indexOf(co) > -1) return;
+                this.stack.push(co), cb();
+            }
+        };
+
+        function classof(o) {
+            return Object.prototype.toString.call(o).slice(8,-1);
+        }
+
+        function copy(to, from, deep){
+            for(var i in from){
+                var fi = from[i];
+                if(!deep){
+                    if(extendTest(fi, i)){
+                        to[i] = fi;
+                    }
+                }else{
+                    var classFI = classof(fi), 
+                        isArr = classFI === 'Array', 
+                        isObj = classFI === 'Object';
+                    if(isArr || isObj){
+                        var tiC = classof(to[i]);
+
+                        isArr ? tiC !== 'Array' && (to[i] = []) : 
+                                tiC !== 'Object' && (to[i] = {});
+
+                        iterator.watch(fi, function(){
+                            copy(to[i], fi, deep);
+                        })
+                    }else{
+                        if(extendTest(fi, i)){
+                            to[i] = fi;
+                        }
+                    }
+                }
+            }
+        }
+
+        var re, len = arguments.length, deep, i = 0, extendTest;
+
+        deep = arguments[i] === true ? (i++, true): false;
+        re   = arguments[i++];
+        extendTest = (typeof arguments[--len] === 'function') ? 
+                arguments[len]: (len++, function(val){ return val !== undefined});
+
+        for(i; i < len; i++){
+            try{
+                copy(re, arguments[i], deep);
+            } catch(e){
+                console.log('extend log: ', arguments[i]);
+            }
+            // if(classof(arguments[i]) === 'Object'){
+                
+            // }
+        }
+
+        return re;
+    }
+
     /**
      * common
      */
@@ -90,12 +156,6 @@
             }
         }
         return false;
-    }
-
-    function buildCurrentEventObject(evt, tgt){
-        evt.target = tgt;
-
-        return evt;
     }
 
     function selectToUnique(ele){
@@ -131,12 +191,12 @@
 
     function throttlePlus(fn, delay, operatDelay) {
         var timer, start;
-        delay = operatDelay < delay ? delay : operatDelay;//必须让动画播放完
+        delay = operatDelay < delay ? delay : operatDelay;// do animation anything
         return function () {
             var self = this, cur = new Date(), args = arguments;
             clearTimeout(timer);
             start || (start = cur);
-            //超时后直接执行保持连贯
+            // keep doing
             if (operatDelay <= cur - start) {
                 fn.apply(self, args);
                 start = cur;
@@ -156,14 +216,12 @@
     function parseCommand(command) {
         command = JSON.parse(command);
 
-        var ele, listeners, evt = {}, selector = command.selector;
+        var ele, listeners, evt, selector = command.selector;
             
         if(inList({ele: selector, type: command.type}, notSendList)) return {};
 
         ele = selector === 'window' ? window : document.querySelector(selector); 
         listeners = eventData[ele[eventDomID]][command.type];
-
-        buildCurrentEventObject(evt, ele);
 
         // TODO: add more
         switch(command.type){
@@ -196,8 +254,10 @@
                 break;
         }
 
+        console.log('parse:', command);
+
         return {
-            event: evt,
+            event: command.event,
             type: command.type,
             ele: ele,
             listeners: listeners
@@ -224,7 +284,7 @@
                 command.scrollTop = ele.scrollTop || scrollY;
                 command.scrollLeft = ele.scrollLeft || scrollX;
                 break;
-
+            case 'touch':
             default:
                 break;
         }
@@ -238,7 +298,22 @@
                 break;
         }
 
-        console.log(command);
+        command.event = {}, command.dom = [];
+
+        extend(true, {}, e, function(val, i){
+            if((val instanceof Node) || val === window){
+                command.dom.push({name: i, selector: selectToUnique(e[i])});
+            } else if(typeof val === 'function'){
+
+            } else {
+                command.event[i] = val;
+            }
+            return false;
+        });
+                
+        console.log('event:\n', e, command.event);
+
+        console.log(JSON.stringify(command));
 
         return JSON.stringify(command);
     }
@@ -276,19 +351,23 @@
                 (eventData[eventID][type] = new Callbacks())).add(
                 function(e) {
                     // e.preventDefault();
+                    
                     listener.call(self, e);
                 }
             );
 
             var callback = function(e) {
-
-                (e.type === 'scroll2') ?
-                    throttleScroll(this, e):
-                    sendCommand(buildCommand(this, e));
-
+                try{
+                    (e.type === 'scroll2') ?
+                        throttleScroll(this, e):
+                        sendCommand(buildCommand(this, e));
+                } catch(err){
+                    console.log(err);
+                }
                 listener.call(this, e);
 
-                e.preventDefault();
+                // console.log(e);
+                // e.preventDefault();
             }
 
             originAddEventListener.call(self, type, callback, useCapture);
@@ -334,5 +413,7 @@
 
         inputs.length && rewriteDefaultEventListenerList(inputs, ['input', 'focus']);
         textarea.length && rewriteDefaultEventListenerList(textarea, ['input', 'focus']);
+
+        // register more default Event
     }
 })(window);
