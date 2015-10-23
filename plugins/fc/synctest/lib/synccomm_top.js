@@ -96,6 +96,37 @@
         return evt;
     }
 
+    function selectToUnique(ele){
+        var selectList = [];
+
+        function select(ele){
+            if(!ele){
+                return selectList;
+            } else if(ele === window){
+                selectList.push('window');
+            } else if(ele === window.document){
+                selectList.push('document');
+            } else if(ele === document.body){
+                selectList.push('body');
+            } else {
+                if(ele.id){
+                    selectList.push('#' + ele.id);
+                    return selectList;
+                }
+                if(ele.classList && ele.classList.length){
+                    selectList.push('.' + ele.classList.toString().split(' ').join('.'));
+                } else {
+                    selectList.push(ele.tagName);
+                }
+                select(ele.parentElement);
+            }
+        }
+        
+        select(ele);
+
+        return selectList.reverse().join('>');
+    }
+
     function parseCommand(command) {
         command = JSON.parse(command);
 
@@ -150,12 +181,8 @@
     function buildCommand(self, e) {
 
         var ele = self, // e.currentTarget,
-            // TODO: recognize more detail to root or select by ID
-            selector = (ele === window) ? 'window' : 
-                    (ele === window.document) ? 'document' :
-                        (ele.tagName + (ele.id ? "#" + ele.id : "") + 
-                            ((ele.classList && ele.classList.length) ? 
-                            "." + ele.classList.toString().split(' ').join('.') : ''));
+            // TODO: recognize more detail to root or select by ID -f
+            selector = selectToUnique(ele);
 
         var command = {
             selector: selector,
@@ -221,7 +248,7 @@
             ((eventData[eventID] || (eventData[eventID] = {}))[type] ||
                 (eventData[eventID][type] = new Callbacks())).add(
                 function(e) {
-                    e.preventDefault();
+                    // e.preventDefault();
                     listener.call(self, e);
                 }
             );
@@ -229,8 +256,8 @@
             var callback = function(e) {
                 
                 sendCommand(buildCommand(this, e));
-
                 listener.call(this, e);
+                e.preventDefault();
             }
 
             originAddEventListener.call(self, type, callback, useCapture);
