@@ -246,7 +246,7 @@
         }
 
         switch(ele.tagName && ele.tagName.toLowerCase()){
-            case 'input': 
+            case 'input':
                 ele.value = command.value;
                 break;
 
@@ -254,7 +254,10 @@
                 break;
         }
 
-        console.log('parse:', command);
+        // command.event.__proto__ = Event.prototype
+        console.log('parse:\t', command);
+
+        //TODO: event add prototype | dom
 
         return {
             event: command.event,
@@ -284,13 +287,12 @@
                 command.scrollTop = ele.scrollTop || scrollY;
                 command.scrollLeft = ele.scrollLeft || scrollX;
                 break;
-            case 'touch':
             default:
                 break;
         }
 
         switch(ele.tagName && ele.tagName.toLowerCase()){
-            case 'input': 
+            case 'input':
                 command.value = ele.value;
                 break;
 
@@ -303,7 +305,7 @@
         extend(true, {}, e, function(val, i){
             if((val instanceof Node) || val === window){
                 command.dom.push({name: i, selector: selectToUnique(e[i])});
-            } else if(typeof val === 'function'){
+            } else if(typeof val === 'function' || /[A-Z]/.test(i[0])){
 
             } else {
                 command.event[i] = val;
@@ -311,9 +313,9 @@
             return false;
         });
                 
-        console.log('event:\n', e, command.event);
+        console.log('build:\t', e, command.event);
 
-        console.log(JSON.stringify(command));
+        console.log('build JSON:\t', JSON.stringify(command));
 
         return JSON.stringify(command);
     }
@@ -331,6 +333,9 @@
         type = "__synctest_event",
         event = new Event(type);
         listener = function(e){
+            extend(e, command.event);
+            console.log('new event:\t', e);
+
             e.preventDefault();
             command.listeners && command.listeners.fire(e);
         }
@@ -413,7 +418,5 @@
 
         inputs.length && rewriteDefaultEventListenerList(inputs, ['input', 'focus']);
         textarea.length && rewriteDefaultEventListenerList(textarea, ['input', 'focus']);
-
-        // register more default Event
     }
 })(window);
