@@ -76,6 +76,11 @@
         }
     };
 
+
+    function classof(o) {
+        return Object.prototype.toString.call(o).slice(8,-1);
+    }
+
     function extend(){
         var iterator = {
             stack: [],
@@ -88,10 +93,6 @@
             }
         };
 
-        function classof(o) {
-            return Object.prototype.toString.call(o).slice(8,-1);
-        }
-
         function copy(to, from, deep){
             for(var i in from){
                 var fi = from[i];
@@ -102,7 +103,7 @@
                 }else{
                     var classFI = classof(fi), 
                         isArr = classFI === 'Array', 
-                        isObj = classFI === 'Object';
+                        isObj = classFI === 'Object' || inArray(classFI, ['Touch', 'TouchList']);
                     if(isArr || isObj){
                         var tiC = classof(to[i]);
 
@@ -218,7 +219,8 @@
             
         if(inList({ele: selector, type: command.type}, notSendList)) return {};
 
-        ele = selector === 'window' ? window : document.querySelector(selector); 
+        ele = selector === 'window' ? window : 
+                selector === 'document' ? document : document.querySelector(selector); 
         listeners = eventData[ele[eventDomID]][command.type];
 
         // TODO: add more
@@ -256,6 +258,15 @@
         console.log('parse:\t', command);
 
         //TODO: event add prototype | dom
+        if(command.type.indexOf('touch') > -1){
+            var touchObj = command.event['changedTouches'];
+            if(touchObj){
+                touchObj.item = function(i){
+                    return touchObj[i]
+                }
+                command.event['targetTouches'] = command.event['touches'] = touchObj;
+            }
+        }
 
         return {
             event: command.event,
@@ -289,27 +300,27 @@
                 break;
         }
 
-        switch(ele.tagName && ele.tagName.toLowerCase()){
-            case 'input':
-                command.value = ele.value;
-                break;
-
-            default:
-                break;
-        }
-
         command.event = {}, command.dom = [];
 
-        extend(true, {}, e, function(val, i){
+        function callback(val, i){
             if((val instanceof Node) || val === window){
-                command.dom.push({name: i, selector: selectToUnique(e[i])});
+                /[0-9]/.test(i) || 
+                    command.dom.push({name: i, selector: selectToUnique(e[i])});
             } else if(typeof val === 'function' || /[A-Z]/.test(i[0])){
 
-            } else {
-                command.event[i] = val;
+            }
+            // else if(inArray(classof(val), ['Touch', 'TouchList'])){
+            //     command.event[i] = (function(i, val){
+            //         return extend(true, {}, val, callback);
+            //     })(i, val);
+            // } 
+            else {
+                //command.event[i] = val;
+                return true;
             }
             return false;
-        });
+        }
+        extend(true, command.event, e, callback);
                 
         console.log('build:\t', e, command.event);
 
