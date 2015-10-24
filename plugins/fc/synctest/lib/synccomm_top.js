@@ -134,9 +134,7 @@
             } catch(e){
                 console.log('extend log: ', arguments[i]);
             }
-            // if(classof(arguments[i]) === 'Object'){
-                
-            // }
+            // if(classof(arguments[i]) === 'Object'){}
         }
 
         return re;
