@@ -221,6 +221,9 @@
 
         ele = selector === 'window' ? window : 
                 selector === 'document' ? document : document.querySelector(selector);
+        
+        if(!ele) return {};
+
         try{
             listeners = eventData[ele[eventDomID]][command.type];
         } catch(e){
