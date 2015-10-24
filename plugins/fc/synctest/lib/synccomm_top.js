@@ -220,8 +220,12 @@
         if(inList({ele: selector, type: command.type}, notSendList)) return {};
 
         ele = selector === 'window' ? window : 
-                selector === 'document' ? document : document.querySelector(selector); 
-        listeners = eventData[ele[eventDomID]][command.type];
+                selector === 'document' ? document : document.querySelector(selector);
+        try{
+            listeners = eventData[ele[eventDomID]][command.type];
+        } catch(e){
+            listeners = new Callbacks();
+        }
 
         // TODO: add more
         switch(command.type){
@@ -309,11 +313,6 @@
             } else if(typeof val === 'function' || /[A-Z]/.test(i[0])){
 
             }
-            // else if(inArray(classof(val), ['Touch', 'TouchList'])){
-            //     command.event[i] = (function(i, val){
-            //         return extend(true, {}, val, callback);
-            //     })(i, val);
-            // } 
             else {
                 //command.event[i] = val;
                 return true;
@@ -348,44 +347,61 @@
             e.preventDefault();
             command.listeners && command.listeners.fire(e);
         }
-        originAddEventListener.call(ele, type, listener);
+
+        originAddEventListener.call(ele, type, listener, false);
         ele.dispatchEvent(event);
         ele.removeEventListener(type, listener);
     }
 
-    var originAddEventListener = EventTarget.prototype.addEventListener;
+    var originAddEventListener, windowOriginAddEventListener, nodeOriginAddEventListener;
 
-    window.addEventListener =
-        EventTarget.prototype.addEventListener = function(type, listener, useCapture) {
-            var self = this;
+    if(window.EventTarget){
+        originAddEventListener = EventTarget.prototype.addEventListener;
+        EventTarget.prototype.addEventListener = __addEventListener;
+    } else {
+        windowOriginAddEventListener = Window.prototype.addEventListener;
+        nodeOriginAddEventListener = Node.prototype.addEventListener;
 
-            self[eventDomID] || (self[eventDomID] = ++eventID);
+        originAddEventListener = function(type, listener, useCapture){
 
-            ((eventData[eventID] || (eventData[eventID] = {}))[type] ||
-                (eventData[eventID][type] = new Callbacks())).add(
-                function(e) {
-                    // e.preventDefault();
-                    
-                    listener.call(self, e);
-                }
-            );
+            var addEvent = this instanceof Window ? 
+                    windowOriginAddEventListener : nodeOriginAddEventListener;
 
-            var callback = function(e) {
-                try{
-                    (e.type === 'scroll2') ?
-                        throttleScroll(this, e):
-                        sendCommand(buildCommand(this, e));
-                } catch(err){
-                    console.log(err);
-                }
-                listener.call(this, e);
+            addEvent.call(this, type, listener, useCapture);
+        } ;
+        Window.prototype.addEventListener = Node.prototype.addEventListener = __addEventListener;
+    }
 
-                // console.log(e);
+    function __addEventListener(type, listener, useCapture) {
+        var self = this;
+
+        self[eventDomID] || (self[eventDomID] = ++eventID);
+
+        ((eventData[eventID] || (eventData[eventID] = {}))[type] ||
+            (eventData[eventID][type] = new Callbacks())).add(
+            function(e) {
                 // e.preventDefault();
+                
+                listener.call(self, e);
             }
+        );
 
-            originAddEventListener.call(self, type, callback, useCapture);
+        var callback = function(e) {
+            try{
+                (e.type === 'scroll2') ?
+                    throttleScroll(this, e):
+                    sendCommand(buildCommand(this, e));
+            } catch(err){
+                console.log(err);
+            }
+            listener.call(this, e);
+
+            // console.log(e);
+            // e.preventDefault();
         }
+
+        originAddEventListener.call(self, type, callback, useCapture);
+    }
 
 
     function rewriteDefaultEventListener(target, evt) {
