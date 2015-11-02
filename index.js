@@ -44,6 +44,22 @@ function servermock(config){
 
     config = utils.extend(true, dft, config);
 
+    // 插件参数处理
+    var pluginList = config.plugins = config.plugins instanceof Array || [],
+        plugins = {__userPluginList: []};
+
+    for(var i = 0, len = pluginList.length; i < len; i++){
+        var name = pluginList[i]['name'];
+        if(name){
+            plugins.__userPluginList.push(name);
+            plugins[name] = pluginList[i]['param'] || {};
+        }
+    }
+
+    config.plugins = plugins;
+
+    // 
+
     var mockpath = config.mock.datapath,
         pagepath = config.mock.pagepath,
         mockrc = config.mock.mockrc;
