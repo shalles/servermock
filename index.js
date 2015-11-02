@@ -17,21 +17,10 @@ function servermock(config){
         websocket: {
             open: false
         },
-        "main": "",
-        // mock请求
-        mock:{
-            datapath: "mock/",
-            pagepath: "", //page mock data path, default same as page file with .json or ,mjson
-            mockrc: ".mockrc", //相对mock datapath
-            //ignore: [],
-            regexurl: { //前面是regex new RegExp()
-                // "/api/placesuggestion" : "placesuggestion.js", //走js 遵循cmd
-                // "/api/placesuggestion" : "placesuggestion.json", //
-                // "/api/placesuggestion" : "placesuggestion.mjson" //
-            }
-        },
+        "main": ""
     };
 
+    //自动获取IP并作为启动服务源
     if(config.hostname === "0.0.0.0"){
         var IP = os.networkInterfaces().en0
         for(var i = 0, len = IP.length; i < len; i++){
@@ -43,14 +32,15 @@ function servermock(config){
     }
 
     config = utils.extend(true, dft, config);
+    config.main = config.main && (config.main[0] !== '\/' ? '\/' + config.main : config.main);
 
     // 插件参数处理
-    var pluginList = config.plugins = config.plugins instanceof Array || [],
+    var pluginList = config.plugins = config.plugins instanceof Array ? config.plugins : [],
         plugins = {__userPluginList: []};
 
     for(var i = 0, len = pluginList.length; i < len; i++){
-        var name = pluginList[i]['name'];
-        if(name){
+        var name = pluginList[i]['name'], open = pluginList[i]['open'];
+        if(open && name){
             plugins.__userPluginList.push(name);
             plugins[name] = pluginList[i]['param'] || {};
         }
@@ -58,17 +48,6 @@ function servermock(config){
 
     config.plugins = plugins;
 
-    // 
-
-    var mockpath = config.mock.datapath,
-        pagepath = config.mock.pagepath,
-        mockrc = config.mock.mockrc;
-
-    config.mock.datapath = path.isAbsolute(mockpath) ? mockpath : path.resolve(buildPath, mockpath);
-    config.mock.mockrc = path.isAbsolute(mockrc) ? mockrc : path.join(config.mock.datapath, mockrc);
-    config.main = config.main[0] !== '\/' ? '\/' + config.main : config.main;
-    config.mock.pagepath = pagepath && (path.isAbsolute(pagepath) ? pagepath: path.resolve(config.mock.datapath, pagepath));
-    // console.log("-------mockrc\n", config.mock.datapath, '\n', mockrc, '\n', path.join(config.mock.datapath, mockrc));
     server(config);
 }
 
