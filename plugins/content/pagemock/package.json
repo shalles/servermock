@@ -1,18 +1,23 @@
 {
-  "name": "mock",
+  "name": "pagemock",
   "version": "1.0.0",
-  "description": "servermock mock模块",
+  "description": "servermock pagemock",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "mock",
-    "data"
+    "page",
+    "mcok",
+    "php",
+    "velocity",
+    "jsp",
+    "python"
   ],
   "author": "shalles",
   "license": "ISC",
   "dependencies": {
-    "mockjs": "^0.1.10"
+    "phpjs": "^1.3.2",
+    "velocityjs": "^0.7.2",
   }
 }

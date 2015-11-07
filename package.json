@@ -35,10 +35,10 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^1.1.1",
-    "mockjs": "^0.1.10",
-    "phpjs": "^1.3.2",
     "urlencode": "^1.1.0",
-    "velocityjs": "^0.7.0",
+    "phpjs": "^1.3.2",
+    "velocityjs": "^0.7.2",
+    "mockjs": "^0.1.10",
     "websocket": "^1.0.21"
   }
 }
