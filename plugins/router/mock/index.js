@@ -3,11 +3,10 @@ var path = require('path'),
     plugin = {};
 
 plugin.excute = function(param){
-    var config = param.config;
 
-    return !plugin.mock.mockResponse(
-            mock.getMockData(param.pathname, param.extname), 
-                param.req, param.res, config);
+    return plugin.mock.mockResponse(
+            plugin.mock.getMockData(param.pathname, param.extname), 
+                param.req, param.res, param.config);
 }
 
 plugin.init = function(config){
