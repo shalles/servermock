@@ -1,24 +1,25 @@
 var fs = require('fs'),
     vm = require('vm'),
     path = require('path'),
-    utils = require('../../../lib/utils'),
+    mockjs = require('mockjs'),
     php = require('./lib/php.js'),
-    vmjs = require('./lib/vm.js');
+    vmjs = require('./lib/vm.js'),
+    utils = require('../../../lib/utils'),
+    plugin = {};
 
 
 // console.log("enter into plugin")
-module.exports = function(parmas){
-    if (utils.inArray(parmas.ext, ['php', 'html', 'vm', 'jsp'])){
-        utils.log("file enter plugin and ext:" + parmas.ext, parmas.filepath);
-        //log("handle file", parmas.filepath);
-        var jsonpath = parmas.mockpath.pagepath ? path.join(parmas.mockpath.pagepath,
-                            path.basename(parmas.filepath).slice(0, - parmas.ext.length)) : 
-                            parmas.filepath.slice(0, - parmas.ext.length),
-            jsonData = utils.readJson(jsonpath + 'json') || parmas.getMockJsonData(utils.readJson(jsonpath + 'mjson') || {});
+plugin.excute = function(parmas){
+    if (utils.inArray(parmas.ext, plugin._acceptExts)){
+        // utils.log("file enter plugin and ext:" + parmas.ext, parmas.filepath);
+        var jsonpath = plugin._basepath ? path.join(plugin._basepath,
+                    path.basename(parmas.filepath).slice(0, - parmas.ext.length)) : 
+                    parmas.filepath.slice(0, - parmas.ext.length),
+            jsonData = plugin.getMockJsonData(jsonpath);
 
         var regx = /<\?(?:(?:php\s+echo)|=)\s*([^;]|[$\w_\d()? :]+);*\s*\?>/g;///<\?php\s+echo\s*([^;]|[$\w_\d()? :]+);*\s*\?>/;///<\?php\s+echo\s*([^;]|[$\w_\d]+);*\s*\?>/g;
         if(jsonData){
-            utils.log("page mock start with extname: ", parmas.ext);
+            utils.log(utils.chalk.green("page mock start with extname: ") + utils.chalk.yellow(parmas.ext));
             switch(parmas.ext){
                 case 'vm':
                     //parmas.cnt = 
@@ -64,3 +65,18 @@ module.exports = function(parmas){
         }
     }
 }
+
+plugin.getMockJsonData = function(jsonpath){
+    try{
+        return utils.readJson(jsonpath + 'json') || mockjs.mock(utils.readJson(jsonpath + 'mjson') || {});
+    } catch(err){
+        utils.log(utils.chalk.red("plugin-pagemock parse mockdata file " + utils.chalk.yellow(jsonpath) + '.json or .mjson failed'), err);
+    }
+}
+
+plugin.init = function(config){
+    plugin._basepath = config.basepath && path.resolve(process.cwd(), config.basepath);
+    plugin._acceptExts = config.acceptExts || ['php', 'html', 'vm', 'jsp'];
+}
+
+module.exports = plugin;
