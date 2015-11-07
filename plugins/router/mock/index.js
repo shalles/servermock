@@ -2,11 +2,11 @@ var path = require('path'),
     Mock = require('./lib/mock.js'),
     plugin = {};
 
-plugin.excute = function(param){
+plugin.excute = function(params){
 
     return plugin.mock.mockResponse(
-            plugin.mock.getMockData(param.pathname, param.extname), 
-                param.req, param.res, param.config);
+            plugin.mock.getMockData(params.pathname, params.extname), 
+                params.req, params.res, params.config);
 }
 
 plugin.init = function(config){

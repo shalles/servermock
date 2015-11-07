@@ -1,6 +1,6 @@
 {
     "errno": 0,
-    "data|1-10": [{
+    "data|10-100": [{
         "uid|0-1000": 1,
         "name": "@MNAME",
         "address": "固定值",
