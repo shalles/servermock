@@ -3,8 +3,8 @@ var fs = require('fs'),
     qs = require('querystring'),
     url = require('url'),
     path = require('path'),
-    utils = require('./utils.js'),
-    mockjs = require('mockjs');
+    mockjs = require('mockjs'),
+    utils = require('../../../../lib/utils.js');
 
 function MockData(opt){
     opt = utils.extend(true, {

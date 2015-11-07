@@ -2,7 +2,8 @@ var os = require('os'),
     fs = require('fs'),
     path = require('path'),
     utils = require('./lib/utils.js'),
-    server = require('./lib/server.js');
+    server = require('./lib/server.js'),
+    plugins = require('./lib/plugins.js');
 
 var buildPath = process.cwd();
     
@@ -31,24 +32,26 @@ function servermock(config){
         }
     }
 
-    config = utils.extend(true, dft, config);
     config.main = config.main && (config.main[0] !== '\/' ? '\/' + config.main : config.main);
 
     // 插件参数处理
     var pluginList = config.plugins = config.plugins instanceof Array ? config.plugins : [],
-        plugins = {__userPluginList: []};
+        pluginsConfig = {__userPluginList: []};
 
     for(var i = 0, len = pluginList.length; i < len; i++){
         var name = pluginList[i]['name'], open = pluginList[i]['open'];
         if(open && name){
-            plugins.__userPluginList.push(name);
-            plugins[name] = pluginList[i]['param'] || {};
+            pluginsConfig.__userPluginList.push(name);
+            pluginsConfig[name] = pluginList[i]['param'] || {};
         }
     }
 
-    config.plugins = plugins;
+    // config.plugins = plugins;
+    
+    // 注册并初始化插件配置
+    config = utils.extend(true, dft, plugins.init(pluginsConfig), config);
 
-    server(config);
+    server(config, plugins);
 }
 
 module.exports = servermock;

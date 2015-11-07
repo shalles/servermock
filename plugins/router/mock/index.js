@@ -1,20 +1,24 @@
-var mock;
+var path = require('path'),
+    Mock = require('./lib/mock.js'),
+    plugin = {};
 
-var Mock = function(param){
+plugin.excute = function(param){
     var config = param.config;
 
-    return !mock.mockResponse(mock.getMockData(pathname, extname), req, res, config)
+    return !plugin.mock.mockResponse(
+            mock.getMockData(param.pathname, param.extname), 
+                param.req, param.res, config);
 }
 
-Mock.init = function(config){
-    var mockpath = config.mock.datapath,
-        mockrc = config.mock.mockrc;
+plugin.init = function(config){
+    var mockrc = config.mockrc,
+        mockpath = config.datapath;
         
-    config.mock.datapath = path.isAbsolute(mockpath) ? mockpath : path.resolve(buildPath, mockpath);
-    config.mock.mockrc = path.isAbsolute(mockrc) ? mockrc : path.join(config.mock.datapath, mockrc);
+    config.datapath = path.isAbsolute(mockpath) ? mockpath : path.resolve(process.cwd(), mockpath);
+    config.mockrc = path.isAbsolute(mockrc) ? mockrc : path.join(config.datapath, mockrc);
     //config.mock.pagepath = pagepath && (path.isAbsolute(pagepath) ? pagepath: path.resolve(config.mock.datapath, pagepath));
 
-    var mock = new Mock(param.mock);
+    plugin.mock = new Mock(config);
 }
 
-module.exports = Mock;
+module.exports = plugin;
