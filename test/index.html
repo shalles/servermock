@@ -12,14 +12,14 @@
         <input type="text" name="ipt" id="ipt">
         <textarea name="opt" id="opt" cols="30" rows="10"></textarea>
     </div>
-    <script src="./zepto.min.js"></script>
+    <script src="./zepto.min.js?v=20151108"></script>
     <script>
         $.ajax({
             url: '/com/api/mockdata.do',
             dataType: 'json',
             success:function(data){
                 if(data['errno'] === 0){
-                    msg.innerHTML = JSON.stringify(data["data"]);
+                    msg.innerHTML = data["data"].map(function(data){return JSON.stringify(data);}).join('<br/>');
                     console.log(data["data"])
                 }
             },

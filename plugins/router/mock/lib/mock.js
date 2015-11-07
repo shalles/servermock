@@ -75,7 +75,7 @@ MockData.prototype = {
         return mockjs.mock(json);
     },
     // mock response 用mock data 响应服务
-    mockResponse: function(data, req, res, config){
+    mockResponse: function(data, req, res, servConfig){
         if(!data.cnt) return false;
         // console.log("----------ajax json:\n", data.type);
         try{
@@ -92,8 +92,9 @@ MockData.prototype = {
                     break;
                 case 'js':
                     //data = new vm.script(data[0]);
-                    // 将分解好的url给mock用户*.js
-                    req.wwwurl = url.parse(config.protocol + '://' + req.headers.host + req.url);
+                    // 将分解好的url给mock用户*.js 
+                    // 只能拦截所起服务下的mock 跨域的不能拦截需用fiddler或charles之类的代理到servermock所起服务下
+                    req.wwwurl = url.parse(servConfig.protocol + '://' + req.headers.host + req.url);
                     var qstr = req.wwwurl.query ? qs.parse(req.wwwurl.query) : {},
                         query = {};
                     for(var i in qstr){
@@ -105,7 +106,7 @@ MockData.prototype = {
                     // console.log("qstr: ", qstr);
                     //extname === 'html' && console.log(req, '\n\n\n\n', req.wwwurl)
                     req.wwwurl.queryObj = query;
-                    config.log && console.log('----------mock js func:\n', data.cnt.toString());
+                    //console.log('----------mock js func:\n', data.cnt.toString());
                     vm.runInThisContext('(' + data.cnt + ')')(req, res);
                     break;
                 default:
