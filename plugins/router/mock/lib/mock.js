@@ -25,7 +25,7 @@ MockData.prototype = {
         this.initMockRandom(path.isAbsolute(opt.mockrc)? opt.mockrc : path.join(opt.datapath, opt.mockrc));
     },
     initMockRandom: function(mockrcpath){
-        console.log("-------mockrcpath:\n", mockrcpath)
+        utils.log(utils.chalk.green("plugin-mock mockrcpath:\n", mockrcpath))
         var mockRandom = fs.existsSync(mockrcpath) ? 
                             JSON.parse(fs.readFileSync(mockrcpath)) : {};
 
@@ -38,9 +38,9 @@ MockData.prototype = {
                 randomData[name] = function(data){
                     return this.pick(this[list]);
                 }
-                console.log(randomData);
+                utils.log(utils.chalk.green(randomData));
                 mockjs.Random.extend(randomData);
-                console.log("-------Random add:\n", randomData)
+                utils.log(utils.chalk.green("plugin-mock Random add:\n", randomData))
             })(i, list, name);
         }
     },
@@ -77,11 +77,11 @@ MockData.prototype = {
     // mock response 用mock data 响应服务
     mockResponse: function(data, req, res, servConfig){
         if(!data.cnt) return false;
-        // console.log("----------ajax json:\n", data.type);
+        // utils.log(utils.chalk.green("----------ajax json:\n", data.type));
         try{
             switch(data.type){
                 case 'mjson': //处理mockjson
-                    console.log(mockjs.mock(JSON.parse(data.cnt)))
+                    //utils.log(utils.chalk.green(mockjs.mock(JSON.parse(data.cnt))))
                     data.cnt = JSON.stringify(mockjs.mock(JSON.parse(data.cnt)), null, 4);
                 case 'json':
                     res.writeHead(200, {
@@ -99,22 +99,22 @@ MockData.prototype = {
                         query = {};
                     for(var i in qstr){
                         var $ = /(.+)\[(.+)\]/.exec(i);
-                        // console.log("$: ", $);
+                        // utils.log(utils.chalk.green("$: ", $));
                         $ ? (query[$[1]] || (query[$[1]] = {})) && (query[$[1]][$[2]] = qstr[i]):
                             query[i] = qstr[i];  
                     }
-                    // console.log("qstr: ", qstr);
-                    //extname === 'html' && console.log(req, '\n\n\n\n', req.wwwurl)
+                    // utils.log(utils.chalk.green("qstr: ", qstr));
+                    //extname === 'html' && utils.log(utils.chalk.green(req, '\n\n\n\n', req.wwwurl))
                     req.wwwurl.queryObj = query;
-                    //console.log('----------mock js func:\n', data.cnt.toString());
+                    //utils.log(utils.chalk.green('----------mock js func:\n', data.cnt.toString()));
                     vm.runInThisContext('(' + data.cnt + ')')(req, res);
                     break;
                 default:
-                    console.log("mock 暂只支持.mjson .json .js文件");
+                    utils.log(utils.chalk.yellow("mock 暂只支持.mjson .json .js文件"));
                     res.end("mock 暂只支持.mjson .json .js文件");
             }
         } catch(e){
-            console.log("mock error: ", e);
+            utils.log(utils.chalk.red("mock error: "), e);
         }
         return true;
     }

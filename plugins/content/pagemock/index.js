@@ -74,9 +74,35 @@ plugin.getMockJsonData = function(jsonpath){
     }
 }
 
+function initMockRandom(mockrcpath){
+    utils.log(utils.chalk.green("plugin-pagemock mockrcpath:\n", mockrcpath))
+
+    mockrcpath = path.isAbsolute(mockrcpath) ? mockrcpath : path.resolve(plugin._basepath, mockrcpath);
+
+    var mockRandom = fs.existsSync(mockrcpath) ? 
+                        JSON.parse(fs.readFileSync(mockrcpath)) : {};
+
+    for(var i in mockRandom){
+        var randomData = {}, 
+            name = i.toLowerCase(), 
+            list = name + 's';
+        (function(i, list, name){
+            randomData[list] = mockRandom[i];
+            randomData[name] = function(data){
+                return this.pick(this[list]);
+            }
+            utils.log(utils.chalk.green(randomData));
+            mockjs.Random.extend(randomData);
+            utils.log(utils.chalk.green("plugin-mock Random add:\n", randomData))
+        })(i, list, name);
+    }
+}
+
 plugin.init = function(config){
     plugin._basepath = config.basepath && path.resolve(process.cwd(), config.basepath);
     plugin._acceptExts = config.acceptExts || ['php', 'html', 'vm', 'jsp'];
+
+    config.mockrc && initMockRandom(config.mockrc);
 }
 
 module.exports = plugin;
