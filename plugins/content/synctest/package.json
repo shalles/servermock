@@ -1,0 +1,28 @@
+{
+    "name": "synctest",
+    "version": "1.0.0",
+    "description": "servermock同步测试插件",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "servermock": {
+        "websocket": {
+            "open": true,
+            "maxsize": 10240,
+            "encoding": "utf8",
+            "originReg": "", //new RegExp 服务接受原正则匹配
+            "sameOrigin": true, // 使用同源发送 default: true
+            "broadcast": true, // 是否广播
+            "mTm": false //是否广播到自己
+        }
+    },
+    "keywords": [
+        "sync",
+        "mobile",
+        "device",
+        "operation"
+    ],
+    "author": "shalles",
+    "license": "ISC"
+}
