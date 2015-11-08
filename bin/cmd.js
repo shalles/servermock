@@ -1,42 +1,46 @@
-#!/usr/bin/env node
-
 var fs = require('fs'),
     path = require('path'),
-    utils = require('../lib/utils.js'),
-    servermock = require('../index.js');
+    utils = require('../lib/utils.js');
 
-var cmd = process.argv[2],
-    cwd = process.cwd();
+var cwd = process.cwd();
 
-if(cmd == 'start'){
-    var config,
-        configPath = path.join(cwd, 'sm.config');
-
-    config = utils.readJson(configPath) || {};
-    console.log('--------------------servermock start-------------------\n',
-                '===config===\n', 
-                config);
-
-    servermock(config);
-} else {
-    console.log('--------------------servermock-------------------\n',
-                '$ servermock start 启动\n', 
-                'git: https://github.com/shalles/servermock/\n',
-                '===配置文件===build path下.smrc文件, 格式如下:\n', 
-                {
-                    "port": 8080,
-                    "protocol": "http or https", //https\
-                    "key": "~/cert/cert.key",
-                    "cert": "~cert/cert.crt",
-                    // mock请求
-                    "mock":{
-                        "datapath": "mock/",
-                        "mockrc": ".mockrc", //相对mock datapath
-                        "regexurl": { //前面是regex new RegExp()
-                            "/api/placesuggestion" : "placesuggestion.js", //走js 遵循cmd
-                            "/api/placesuggestion" : "placesuggestion.json", //
-                            "/api/placesuggestion" : "placesuggestion.mjson" //
-                        }
-                    },
-                });
+var Command = function (){
+    this.commands = {};
+    this.load();
 }
+
+Command.prototype = {
+    load: function (){
+        var cmd, cmds = fs.readdirSync(path.join(__dirname, 'command'));
+        for(var i = 0, len = cmds.length; i < len; i++){
+            cmd = cmds[i].slice(0, -3);
+            try{
+                this.commands[cmd] = require(path.join(__dirname, 'command', cmds[i]));
+                utils.log(utils.chalk.green('load command ' + cmd + ' success'));
+            } catch(err){
+                utils.log(utils.chalk.red('load command ' + cmd + ' error'), err);
+            }
+        }
+    },
+    parse: function (commands){
+        var cmds = [];
+        //for(var i = 0, len = commands.length; i < len; i++){
+            cmds.push({
+                name: commands[0],
+                params: commands.slice(1)
+            });
+        //}
+        
+        return cmds;
+    },
+    excute: function(commands){
+        var cmd, cmds = this.parse(commands);
+        for(var i = 0, len = cmds.length; i < len; i++){
+            cmd = cmds[i];
+            this.commands[cmd.name](cmd.params);
+        }  
+    }
+}
+
+module.exports = Command;
+

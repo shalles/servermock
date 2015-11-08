@@ -3,7 +3,7 @@
   "version": "1.1.6",
   "description": "fepro server and mock module",
   "main": "index.js",
-  "bin": "./bin/cmd.js",
+  "bin": "./bin/index.js",
   "scripts": {
     "test": "servermock start"
   },
