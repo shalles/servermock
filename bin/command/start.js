@@ -8,7 +8,7 @@ module.exports = function(params){
     var configPath = path.join(cwd, 'sm.config'),
         config = utils.readJson(configPath) || {};
 
-    utils.log(utils.chalk.green('start with config'), config);
+    utils.log(utils.chalk.green('start with config\n'), config);
 
     servermock(config);
 }

@@ -68,16 +68,17 @@ plugin.excute = function(parmas){
 
 plugin.getMockJsonData = function(jsonpath){
     try{
-        return utils.readJson(jsonpath + 'json') || mockjs.mock(utils.readJson(jsonpath + 'mjson') || {});
+        return utils.readJson(jsonpath + 'json') || 
+                mockjs.mock(utils.readJson(jsonpath + 'mjson') || {});
     } catch(err){
         utils.log(utils.chalk.red("plugin-pagemock parse mockdata file " + utils.chalk.yellow(jsonpath) + '.json or .mjson failed'), err);
     }
 }
 
 function initMockRandom(mockrcpath){
-    utils.log(utils.chalk.green("plugin-pagemock mockrcpath:\n", mockrcpath))
-
-    mockrcpath = path.isAbsolute(mockrcpath) ? mockrcpath : path.resolve(plugin._basepath, mockrcpath);
+    mockrcpath = path.isAbsolute(mockrcpath) ? mockrcpath : 
+                    path.resolve(plugin._basepath, mockrcpath);
+    utils.log(utils.chalk.green("plugin-pagemock mockrcpath:\n"), mockrcpath)
 
     var mockRandom = fs.existsSync(mockrcpath) ? 
                         JSON.parse(fs.readFileSync(mockrcpath)) : {};
@@ -91,9 +92,9 @@ function initMockRandom(mockrcpath){
             randomData[name] = function(data){
                 return this.pick(this[list]);
             }
-            utils.log(utils.chalk.green(randomData));
+
             mockjs.Random.extend(randomData);
-            utils.log(utils.chalk.green("plugin-mock Random add:\n", randomData))
+            utils.log(utils.chalk.green("plugin-pagemock Random add:\n"), randomData);
         })(i, list, name);
     }
 }

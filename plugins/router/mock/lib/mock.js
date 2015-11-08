@@ -25,7 +25,7 @@ MockData.prototype = {
         this.initMockRandom(path.isAbsolute(opt.mockrc)? opt.mockrc : path.join(opt.datapath, opt.mockrc));
     },
     initMockRandom: function(mockrcpath){
-        utils.log(utils.chalk.green("plugin-mock mockrcpath:\n", mockrcpath))
+        utils.log(utils.chalk.green("plugin-mock mockrcpath:\n"), mockrcpath)
         var mockRandom = fs.existsSync(mockrcpath) ? 
                             JSON.parse(fs.readFileSync(mockrcpath)) : {};
 
@@ -38,9 +38,9 @@ MockData.prototype = {
                 randomData[name] = function(data){
                     return this.pick(this[list]);
                 }
-                utils.log(utils.chalk.green(randomData));
+                
                 mockjs.Random.extend(randomData);
-                utils.log(utils.chalk.green("plugin-mock Random add:\n", randomData))
+                utils.log(utils.chalk.green("plugin-mock Random add:\n"), randomData)
             })(i, list, name);
         }
     },
