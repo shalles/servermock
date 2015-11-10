@@ -16,28 +16,37 @@ module.exports = function(params){
 
     utils.mkPath(tempPath);
     
-    var name = src.slice(src.lastIndexOf('\/'), -4),
+    var name = src.slice(src.lastIndexOf('\/') + 1, -4),
         tmpPluginPath = path.join(tempPath, name),
         command = '';
     //组织命令 删除旧临时文件 load plugin 
-    command += 'cd ' + tempPath + ' && ' + (fs.existsSync(tmpPluginPath) ? 'rm -rf * && ' : '') + 'git clone ' + src;
+    var time = '#';
+    var timer = setInterval(function(){
+        console.log(time+= '#');
+    }, 1200);
+    command += 'cd ' + tempPath + ' && ' + (fs.existsSync(tmpPluginPath) ? utils.cmd.rm + ' -rf * && ' : '') + 'git clone ' + src;
     utils.excute(command, function (stdout, stderr) {
-        var pType;
+        stdout && console.log(stdout), stderr && console.log(stderr);
         try{
-            pType = utils.readJson(path.join(tempPath, fs.readdirSync(tempPath)[0], 'package.json')).servermock.type;
+            var pType = utils.readJson(path.join(tempPath, fs.readdirSync(tempPath)[0], 'package.json'))
+                             .servermock.type.replace(/[^a-zA-Z]/ig, '');
         } catch (err){
             utils.log('plugin not define type in package.json servermock.type ' + src);
             return;
         }
+        utils.log(utils.chalk.green('plugin ' + name + ' load success!'));
         
-        var pluginPath = path.join(homeDir, '.servermock/plugins/', pType);
-        utils.mkPath(pluginPath);
+        var pluginTypePath = path.join(homeDir, '.servermock/plugins/', pType),
+            pluginPath = path.join(pluginTypePath, name);
+        utils.mkPath(pluginTypePath);
 
-        command = "mv -f " + tmpPluginPath + ' ' + pluginPath;
+        command = (pluginPath !== '\/' && fs.existsSync(pluginPath) ? utils.cmd.rm + ' -rf ' + pluginPath + ' && ': '') + 
+                            utils.cmd.mv + " -f " + tmpPluginPath + ' ' + pluginTypePath;
         utils.excute(command, function(stdout, stderr){
-
-            utils.log(utils.chalk.green('plugin load success!'));
-        }, utils.chalk.red("load pligins error\t"))
+            clearInterval(timer);
+            stdout && console.log(stdout), stderr && console.log(stderr);
+            utils.log(utils.chalk.green('plugin ' + name + ' installed successfully!'));
+        });
     }, utils.chalk.red("load pligins error\t"));
 
 }
