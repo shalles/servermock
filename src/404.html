@@ -5,19 +5,75 @@
     <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
     <title>servermock 404</title>
     <style>
+        @font-face {
+            font-family: 'servermock';
+            src:url('http://shalles.github.io/assets/iconfont/servermock/fonts/servermock.eot?t2y3i3');
+            src:url('http://shalles.github.io/assets/iconfont/servermock/fonts/servermock.eot?t2y3i3#iefix') format('embedded-opentype'),
+                url('http://shalles.github.io/assets/iconfont/servermock/fonts/servermock.ttf?t2y3i3') format('truetype'),
+                url('http://shalles.github.io/assets/iconfont/servermock/fonts/servermock.woff?t2y3i3') format('woff'),
+                url('http://shalles.github.io/assets/iconfont/servermock/fonts/servermock.svg?t2y3i3#servermock') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .icon {
+            font-family: 'servermock';
+            speak: none;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            
+            /* Enable Ligatures ================ */
+            letter-spacing: 0;
+            -webkit-font-feature-settings: "liga";
+            -moz-font-feature-settings: "liga=1";
+            -moz-font-feature-settings: "liga";
+            -ms-font-feature-settings: "liga" 1;
+            -o-font-feature-settings: "liga";
+            font-feature-settings: "liga";
+
+            /* Better Font Rendering =========== */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
         body{
             text-align: center;
         }
         a{
             color:#06f;
+            text-decoration: initial;
         }
         h2{
             text-shadow: #333 1px 4px 6px;
         }
+        .back{
+            font-size: 40px;
+            vertical-align: middle;
+        }
+        .container{
+            padding: 10px 0;
+            font-size: 80px;
+        }
+        .path{
+            color: #666;
+            font-size: 12px;
+        }
+        .container .n4{
+            color: #368;
+        }
+        .container .n0{
+            color: #8ff;
+        }
     </style>
 </head>
 <body>
-    <h2>404 can't find file or directory <a href="../">--back</a></h2>
-    <span>{{pathname}}</span>
+    <h2><em class="icon">&#xe923;&#xe929;&#xe923;</em> can't find file or directory <a class="icon back" href="../">&#xe92a;</a></h2>
+    <div class="container icon">
+        <i class="n4">&#xe923;</i><i class="n0">&#xe929;</i><i class="n4">&#xe923;</i>
+    </div>
+    <span class="path">{{pathname}}</span>
 </body>
 </html>

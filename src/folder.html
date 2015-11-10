@@ -16,7 +16,7 @@
                 font-style: normal;
             }
 
-            .icon {
+            .icon, .iconfont::before {
                 font-family: 'servermock';
                 speak: none;
                 font-style: normal;
@@ -24,6 +24,15 @@
                 font-variant: normal;
                 text-transform: none;
                 line-height: 1;
+                
+                /* Enable Ligatures ================ */
+                letter-spacing: 0;
+                -webkit-font-feature-settings: "liga";
+                -moz-font-feature-settings: "liga=1";
+                -moz-font-feature-settings: "liga";
+                -ms-font-feature-settings: "liga" 1;
+                -o-font-feature-settings: "liga";
+                font-feature-settings: "liga";
 
                 /* Better Font Rendering =========== */
                 -webkit-font-smoothing: antialiased;
@@ -55,19 +64,19 @@
                 line-height: 24px;
             }
             
-            .content li a::before{
+            .content .iconfont::before{
                 padding-right: 10px;
                 content: '\e904';
                 font-size: 16px;
                 color: #369;
             }
 
-            .content li.folder a::before{
+            .content .folder.iconfont::before{
                 content: '\f016';
                 color: #48f;
             }
 
-            .content li.back a::before{
+            .content .back.iconfont::before{
                 content: '\e903';
             }
     
@@ -98,7 +107,7 @@
     <body>
         <h1>servermock</h1>
         <ul class="content">
-            <li class="icon back"><span></span><a style="color: #06f;" href="../">后退</a></li>
+            <li><span></span><a style="color: #06f;" href="../"  class="iconfont back">后退</a></li>
             {{ filelist }}
         </div>
     </body>
