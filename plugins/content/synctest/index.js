@@ -27,6 +27,8 @@ plugin.excute = function (parmas){
 
 plugin.init = function(config){
     var serverConfig = config.__serverConfig;
+    
+    utils = config.__utils;
     acceptExtname = config.exts || ['html', 'htm'];
     origin = (config.vpn || serverConfig.hostname) + ":" + serverConfig.port;
     protocol = serverConfig.protocol

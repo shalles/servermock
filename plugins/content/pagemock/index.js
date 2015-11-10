@@ -4,7 +4,7 @@ var fs = require('fs'),
     mockjs = require('mockjs'),
     php = require('./lib/php.js'),
     vmjs = require('./lib/vm.js'),
-    utils = require('../../../lib/utils'),
+    utils,
     plugin = {};
 
 
@@ -100,6 +100,7 @@ function initMockRandom(mockrcpath){
 }
 
 plugin.init = function(config){
+    utils = config.__utils;
     plugin._basepath = config.basepath && path.resolve(process.cwd(), config.basepath);
     plugin._acceptExts = config.acceptExts || ['php', 'html', 'vm', 'jsp'];
 

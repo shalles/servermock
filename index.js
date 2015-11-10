@@ -50,6 +50,7 @@ function servermock(config){
             pluginsConfig.__userPluginList.push(name);
             pluginsConfig[name] = pluginList[i]['param'] || {};
             pluginsConfig[name].__serverConfig = serverConfig;
+            pluginsConfig[name].__utils = utils;
         }
     }
     

@@ -14,6 +14,9 @@
     "jsp",
     "python"
   ],
+  "servermock": {
+    "type": "content"
+  },
   "author": "shalles",
   "license": "ISC",
   "dependencies": {

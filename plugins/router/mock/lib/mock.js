@@ -4,9 +4,10 @@ var fs = require('fs'),
     url = require('url'),
     path = require('path'),
     mockjs = require('mockjs'),
-    utils = require('../../../../lib/utils.js');
+    utils;
 
 function MockData(opt){
+    utils = opt.__utils;
     opt = utils.extend(true, {
         datapath: path.join(process.cwd() + "mock/"),
         mockrc: ".mockrc", //相对mock datapath
@@ -19,7 +20,7 @@ function MockData(opt){
 }
 
 MockData.prototype = {
-    init: function(opt){
+    init: function(opt){        
         this.ignore = opt.ignore;
         this.mockItems = this.convertRegexURL(opt.datapath, opt.regexurl);
         this.initMockRandom(path.isAbsolute(opt.mockrc)? opt.mockrc : path.join(opt.datapath, opt.mockrc));

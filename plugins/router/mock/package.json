@@ -10,6 +10,9 @@
     "mock",
     "data"
   ],
+  "servermock": {
+    "type": "content"
+  },
   "author": "shalles",
   "license": "ISC",
   "dependencies": {

@@ -40,13 +40,19 @@ var plugin = {
             var pluginTypePath = path.join(homeDir, '.servermock/plugins/', pType),
                 pluginPath = path.join(pluginTypePath, name);
             utils.mkPath(pluginTypePath);
-    
+            
+            // 移动到指定类型的插件包 删除已有同名插件
             command = (pluginPath !== '\/' && fs.existsSync(pluginPath) ? utils.cmd.rm + ' -rf ' + pluginPath + ' && ': '') + 
                                 utils.cmd.mv + " -f " + tmpPluginPath + ' ' + pluginTypePath;
             utils.excute(command, function(stdout, stderr){
-                clearInterval(timer);
+                command = 'cd ' + pluginPath + ' && npm install';
+                time = '#';
+                utils.excute(command, function(stdout, stderr){
+                    clearInterval(timer);
+                    stdout && console.log(stdout), stderr && console.log(stderr);
+                    utils.log(utils.chalk.green('plugin ' + name + ' installed successfully!'));
+                });
                 stdout && console.log(stdout), stderr && console.log(stderr);
-                utils.log(utils.chalk.green('plugin ' + name + ' installed successfully!'));
             });
         }, utils.chalk.red('load pligins error\t'));
     }
