@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var fs = require('fs'),
+    utils = require('../lib/utils.js'),
     Command = require('./cmd.js');
     
 var cmds = process.argv.slice(2),
