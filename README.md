@@ -1,359 +1,225 @@
 # servermock
-node static server and mock data
-
-**version `1.1.4`** <br>
-增加多设备同步测试功能 
-
-操作一个设备多个设备同步操作事件 
-
-**version `1.1.1`** <br>
-支持websocket
-
-**version `1.0.15`** <br>
-fix 中文 path
-
-**version `1.0.14`** <br>
-增加pagemock data file config
-
-**version `1.0.11`** <br>
-+增加插件支持 support plugin <br>
-+pagemock plugin <br>
-pagemock now support: <br>
-most velocity template grammar <br>  
-bits of php grammar like
-
-```php
-<?php echo is_null($variable)? "": "<em>".$variable. "</em>元"; ?>
-<?php  echo $var; ?>
-...
-```
-
-support most function, variable and bits of logic expression
+一开始只准备做一个服务和mock数据的小工具，后来发现可以做的事还很多, 更像给大家
 
 ## Install
 
 ```shell
 sudo npm install servermock -g  
 
+//也可以当做node_module来引用到自己的工具中
+npm install servermock --save
+
+```
+
+## Usage
+
+```shell
 //启动命令(start)
 servermock start
 
-//or use as node module
-npm install servermock --save
-require('servermock')
+//安装删除插件
+servermock plugin [intall | delete] | [-i | -d] [git repository]
+//如:
+servermock plugin intall https://github.com/shalles/synctest.git
+//或
+servermock plugin -i https://github.com/shalles/synctest.git
+
+
+//或作为node模块使用
+require('servermock')(config)
+
 ```
 
 ## Config
 
-sm.config josn file in the project root or start path
+启动目录下的配置文件 sm.config
 
 ```js
 {
-    "port": 8080,
-    "hostname": "0.0.0.0", //default 127.0.0.1 if 0.0.0.0 auto get IPv4
+    "port": 8080, // 启动端口 默认80 unix系需要sudo
+    "hostname": "0.0.0.0", // 当为0.0.0.0时自动获取当前IPv4
     "protocol": "http", //https
-    "key": "~/cert/cert.key", // if https
-    "cert": "~cert/cert.crt", // for https
-    "websocket": {
-        "open": true, //default:false
-        "maxsize": 10485760, //10M default: 10M
-        "encoding": "utf8", //default: 'utf8'
-        "callback": "console.log('outside: ', data); return 'get data ' + data;", //function string
-        "originReg": "127.0.0.1", //new RegExp 服务接受原正则匹配 default:""
-        "broadcast": true, // 是否广播 default:true
-        "mTm": true, //是否广播到自己 default:false
-        "synctest": {
-            "open": true, //开启多设备同步调试 
-            //"vpn": "192.168.1.6", // 默认使用server hostname
-            "exts": ["html", "php", "vm"] //需要同步测试的页面扩展
+    //"key": "~/cert/cert.key",
+    //"cert": "~cert/cert.crt",
+    "main": "./index.html",
+    // 需要使用websocket才配置，使用插件对其有依赖时会覆盖插件的配置
+    // "websocket": {  
+    //     "open": true,
+    //     "maxsize": 10240,
+    //     "encoding": "utf8",
+    //     // callback: "console.log('outside: ', data); return 'get data ' + data;",
+    //     // callback: function(data){
+    //     //     console.log('outside: ', data);
+    //     //     return 'get data ' + data;
+    //     // },
+    //     "originReg": "", //new RegExp 服务接受原正则匹配
+    //     "sameOrigin": true, // 使用同源发送 default: true
+    //     "broadcast": true, // 是否广播
+    //     "mTm": false, //是否广播到自己
+    //     "debug": false //log
+    // },
+    // 
+    // 插件 
+    "plugins":[{
+        "name": "mock",
+        "open": true,
+        "param": {
+            "datapath": "mock/",
+            "mockrc": ".mockrc", //相对mock datapath 可用绝对路径
+            "ignore": ["html", "jpg", "png", "gif"],
+            "regexurl": { //前面是regex new RegExp()
+                "com/api/mockdata.do": "mockdata.mjson",
+                "/static/webapp/src/": "filemock.js",
+                "/api/1placesuggestion" : "placesuggestion.js", //走js 遵循cmd
+                "/api/1placesuggestion" : "placesuggestion.json", //
+                "/api/placesuggestion" : "placesuggestion.mjson" //
+            }
         }
-    },
-    "main": "index.html", // relative to root such http://127.0.0.1:8080/index.html
-    // mock请求
-    "mock":{
-        "datapath": "mock/",
-        "pagepath": "", //page mock data path, default same as page file with .json or .mjson
-        "mockrc": ".mockrc", //如果不是绝对路径则相对mock datapath
-        "ignore": ["jpg", "png", "gif", "html", "js", "css"], //default value
-        "regexurl": { //前面是regex new RegExp()
-            "/api/mockdata1" : "mockdata.js", //走js 遵循cmd
-            "/api/mockdata1" : "mockdata.json", //json数据返回
-            "/api/mockdata" : "mockdata.mjson" //mockjson数据返回
+    },{
+        "name": "pagemock",
+        "open": true,
+        "param": {
+            "basepath": "mock/page", //"", //default: 同级目录
+            "mockrc": "../.mockrc", //基于basepath 可与mock同用 可用绝对路径
+            "acceptExts": ["php", "html", "vm"] //监听的页面扩展
         }
-    },
-}
-```
-支持单行注释 多行注释暂不支持
-support simple line comments
-
-protocol: http/https <br>
-when https you should give the value of key and cert
-
-mock.datapath is the mock data root <br>
-mock.pagepath is page mock data path, default same as page file with .json or .mjson extname<br>
-mock.regexurl{name:value} <br>
-name: match mock url, support regex <br>
-value: match data file path relative datapath
-
-**Directory**
-
-builddir or start server directory
---mock/ <br>
-----.mockrc <br>
-----mockdata.js <br>
-----mockdata.json <br>
-----mockdata.mjson <br>
-----... <br>
---src <br>
---sm.config <br>
-
-
-**or**
-
-```js
-var servermock = require('servermock');
-servermock(config); // or use default config
-```
-
-### Mock
-
-support mockjson(.mjson) json(.json) function(req, res)(.js)
-
-**.js**
-
-
-```js
-function(req, res){
-    // req.headers: { 
-    //    host: '127.0.0.1:8080',
-    //    connection: 'keep-alive',
-    //    accept: 'application/json, text/javascript, */*; q=0.01',
-    //    'x-requested-with': 'XMLHttpRequest',
-    //    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36',
-    //    referer: 'http://127.0.0.1:8080/src/export/pages/app-1.html',
-    //    'accept-encoding': 'gzip, deflate, sdch',
-    //    'accept-language': 'zh-CN,zh;q=0.8,en;q=0.6,tr;q=0.4,ja;q=0.2',
-    //    cookie: '_ga=GA1.1.412069457.1440574551',
-    //    'ra-ver': '3.0.7',
-    //    'ra-sid': 'D397FW#5-20150603-021623-afsadf-asfew' 
-    // }
-    // req.method: 'GET',
-    // req.wwwurl: { 
-    //     protocol: 'http:',
-    //     slashes: true,
-    //     auth: null,
-    //     host: '127.0.0.1:8080',
-    //     port: '8080',
-    //     hostname: '127.0.0.1',
-    //     hash: null,
-    //     search: '?city=%E5%8C%97%E4%&query=d',
-    //     query: 'city=%E5%8C%97%E4%&query=d',
-    //     pathname: '/api/placesuggestion',
-    //     path: '/api/placesuggestion?city=%E5%8C%97%E4%&query=d',
-    //     href: 'http://127.0.0.1:8080/api/placesuggestion?city=%E5%8C%97%E4%&query=d' 
-    //     queryObj:{ 
-    //         city: '北京市',
-    //         query: 'd' 
-    //     }
-    // }
-    // 对.js .css等重定向等
-    // res.statusCode = 302;
-    // res.setHeader("Location", "http://127.0.0.1:8088" + req.url);
-    // res.end();
-    console.log("req:", req);
-    //console.log("res:", res);
-    var data = {"errno":0,"data":[1,2,3,4,5,6,7,8,'a','b','c','d']};
-    data['data'] = data['data'].slice(Math.random(1)*8)
-    
-    res.end(JSON.stringify(data)); //response.write(); response.end()
-}
-```
-
-**.json**
-
-```json
-{
-    "errno": 0,
-    "data": [
-        {
-            "id": 1,
-            "name": "shalles"
-        },{
-            "id": 2,
-            "name": "shalles2"
-        },{
-            "id": 3,
-            "name": "shalles3"
+    },{// 需要单独安装 servermock plugin -i https://github.com/shalles/synctest.git
+        "name": "synctest", 
+        "open": true,
+        "param": {
+            //vpn: "192.168.1.6",
+            "exts": ["html", "php", "vm"]
         }
-    ]
-}
-
-```
-
-**.mjson**
-
-```js
-{
-    "errno": 0,
-    "data|1-10": [{
-        "uid|0-1000": 1,
-        "name": "@MNAME",
-        "age|10-99": 0,
-        "city": "@MCITY"
     }]
 }
-
-```
-generate<br>
-data [1, 10]<br>
-uid betoween 0 and 1000<br>
-age betoween 10 and 99<br>
-random MNAME in .mockrc "MNAME": ["shalles", "东阳", "小明", "小梅", "乔治"]<br>
-so name is one of ["shalles", "东阳", "小明", "小梅", "乔治"], so as city
-
-more [ http://mockjs.com/#语法规范 ] (http://mockjs.com/#语法规范)
-
-**.mockrc自定义mockjson随机变量**
-
-除了默认的还提供自定义随机变量(*.mjson)
-
-```json
-{
-    "MCITY":["北京", "上海", "广州", "深圳", "贵阳", "厦门", "成都"],
-    "MNAME": ["shalles", "东阳", "小明", "小梅", "乔治"]
-}
 ```
 
-**test file**
+1.sm.config支持单行注释"//", 暂不支持多行注释"/**/";<br>
+2.插件按需open;<br>
+3.protocol:启动server服务的协议支持http/https， 当为https是需要传入key和cert两个证书文件;
+4.main提供的话会在start的时候启动浏览器打开服务，不提供则不打开;
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>servermock test demo</title>
-</head>
-<body>
-    <h2>show servermock server and mock data commond+R or F5 refresh this page</h2>
-    <div id="msg"></div>
-    <script src="./zepto.min.js"></script>
-    <script>
-        $.ajax({
-            url: '/com/api/mockdata.do',
-            dataType: 'json',
-            success:function(data){
-                if(data['errno'] === 0){
-                    msg.innerHTML = JSON.stringify(data["data"]);
-                    console.log(data["data"])
-                }
-            },
-            error:function(data){
-                alert('error' + JSON.stringify(data));
-            }
-        })
-    </script>
-</body>
-</html>
-```
-
-
-## page mock
-
-**Directory**
-
-builddir <br>
-... <br>
---pagedir <br>
-----page1.php <br>
-----page1.json / page1.mjson <br>
-----page2.vm <br>
-----page2.json / page2.mjson <br>
-----... <br>
---... <br>
-
-*such*
-
-page1.php
-
-```php
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>PHP page</title>
-</head>
-<body>
-    <div><span>name:</span> <?php $name ?></div>
-    <div><span>age:</span> <?php $age; ?></div>
-    <?php echo "show your info";?>
-    <br>
-    <?php echo is_null($show): "default": $show;?>
-    <div>
-        <?php echo is_null($variable)? "": "<em>".$variable. "</em>元"; ?>
-    </div>
-</body>
-</html>
-```
-page1.json
-
-```json
-{
-    "$name": "shalles",
-    "$age": 18,
-    "show": null
-}
-```
-
-page1.mjson
-
-```json
-{
-    "name": "shalles",
-    "age|18-20": 18,
-    "show|0-1": "I will support php, python, jsp and so on"
-}
-```
+更多配置使用请看对应插件 [mock](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md) [pagemock](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md) [synctest](https://github.com/shalles/synctest/blob/master/README.md)
 
 ## Plugin
 
+#### 插件安装/删除
+
 ```js
-$ mkdir ~/.servermock/plugins
-$ cd ~/.servermock/plugins
-$ mkdir fc (or ... now just support fc) 
-$ cd fc
-$ mkdir yourplugin
-$ cd yourplugin
-$ vim index.js
+//安装删除插件
+servermock plugin [intall | delete] | [-i | -d] [git repository]
+//如:
+servermock plugin intall https://github.com/shalles/synctest.git
+//或
+servermock plugin -i https://github.com/shalles/synctest.git
 ```
-**plugin pagemock**
+
+#### 插件列表
+
+1. mock （默认）
+2. pagemock (默认)
+3. synctest（需安装）
+4. ...
+
+#### 插件编写
+
+1. 主要实现两个方法init 和 excute;
+2. init的时候可以拿到用户配置sm.config中serverConfig的一些配置和servermock [utils.js](https://github.com/shalles/servermock/blob/master/lib/utils.js)提供的一些使用方法具体可以看源码，虽然写的很差但会慢慢优化。 主要提倡用utils.log
+3. 目前提供了两个插件口content和router 并在excute的时候提供不同的参数和返回值
+4. 在package.json中配置需要servermock提供的支持
+
+**如下以synctest为例**
+
+synctest的主要实现原理 <br>   
+1. 监听页面的事件->编辑事件信息;
+2. 用servermock提供的websocket功能将编辑的事件信息广播到链接的其他设备的打开的页面监听client端
+3. 在接收到事件信息后解析并重构事件
+4. 触发该事件
+5. 循环
+
+a. 要在页面监听事件就需要向servermock启动的服务的页面文件中插入脚本，在servemock中属于content类插件即如下package.json中"type"为"content";
+b.需要用到servermock的websocket功能则需要配置websocket的信息这是正对servermock配置的，且高于默认配置，低于用户配置
+c.注意:servermock以文件的目录名位插件名，主目录下必须包含主文件index.js和package.json, package.json与node同用，插件使用node module加载 因此写起来和node语法无异
+
+**package.json**
+
+```json
+    "servermock": {
+        "type": "content",
+        "websocket": {
+            "open": true,
+            "maxsize": 10240,
+            "encoding": "utf8",
+            "originReg": "",
+            "sameOrigin": true,
+            "broadcast": true,
+            "mTm": false
+        }
+    },
+```
+
+**index.js**
 
 ```js
-var fs = require('fs'),
-    vm = require('vm'),
-    path = require('path'),
-    utils = require('../../../lib/utils'),
-    php = require('./lib/php.js'),
-    vmjs = require('./lib/vm.js');
+var utils,
+    origin,
+    protocol,
+    acceptExtname,
+    plugin = {},
+    path = require('path');
 
-// console.log("enter into plugin")
-module.exports = function(parmas){
-    //do something    
-    //
-    //parms ={
-    //    cnt: file, //string
-    //    stat: fdStat, //stat
-    //    ext: extname, //string such js html
-    //    config: config // object
-    //    filepath: pathname, //string
-    //    mockpath: config.mock, //object
-    //    getMockJsonData: mock.getMockJsonData //function parma is mockjson data return common json
-    //                                          //such parmas.getMockJsonData(utils.readJson(jsonpath + 'mjson') || {})
-    //}
-    //return parms.cnt
+plugin.excute = function (params){
+    
+    if(utils.inArray(params.ext, acceptExtname)){
+        console.log('[synctest loading]');
+        // do something
+        return params.cnt;
+    }
 }
+
+plugin.init = function(config){
+    var serverConfig = config.__serverConfig; // sm.config中的部分配置信息
+    
+    utils = config.__utils; //utils.js
+    acceptExtname = config.exts || ['html', 'htm'];
+    origin = (config.vpn || serverConfig.hostname) + ":" + serverConfig.port;
+    protocol = serverConfig.protocol
+}
+
+module.exports = plugin;
 ```
-plugin example [ https://github.com/shalles/servermock/tree/master/plugins/fc/pagemock ](https://github.com/shalles/servermock/tree/master/plugins/fc/pagemock)
 
-## more look test demo 
 
-[ https://github.com/shalles/servermock/tree/master/test ](https://github.com/shalles/servermock/tree/master/test)
+**content 与 router下 config**
+
+两个类型的插件在init提供相同的config参数，即`__utils`, `__serverConfig`;
+
+**content下的params**
+
+```js
+//当前请求
+plugins.excute('router', {
+    res: res,           //response mock插件拦截匹配的req，然后res返回mock数据
+    req: req,           //request
+    pathname: pathname, //请求的文件路径
+    extname: extname    //请求的文件扩展
+});
+```
+
+**router下的params**
+
+```js
+// 当前请求
+plugins.excute('content', {
+    cnt: fileContent,   // 请求匹配文件内容
+    stat: fdStat,       // 请求匹配文件的stat信息
+    ext: extname,       // 请求匹配文件的扩展
+    filepath: pathname  // 请求匹配文件的物理路径
+})
+```
+
+**目录结构**
+
+[详情参考实例synctest](https://github.com/shalles/synctest)
+
+**[test demo](https://github.com/shalles/servermock/tree/master/test)**
