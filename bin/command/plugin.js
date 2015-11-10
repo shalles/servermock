@@ -26,35 +26,42 @@ var plugin = {
             console.log(time+= '#');
         }, 1200);
         command += 'cd ' + tempPath + ' && ' + (fs.existsSync(tmpPluginPath) ? utils.cmd.rm + ' -rf * && ' : '') + 'git clone ' + src;
-        utils.excute(command, function (stdout, stderr) {
-            stdout && console.log(stdout), stderr && console.log(stderr);
-            try{
-                var pType = utils.readJson(path.join(tempPath, fs.readdirSync(tempPath)[0], 'package.json'))
-                                .servermock.type.replace(/[^a-zA-Z]/ig, '');
-            } catch (err){
-                utils.log('plugin not define type in package.json servermock.type ' + src);
-                return;
-            }
-            utils.log(utils.chalk.green('plugin ' + name + ' load success!'));
-            
-            var pluginTypePath = path.join(homeDir, '.servermock/plugins/', pType),
-                pluginPath = path.join(pluginTypePath, name);
-            utils.mkPath(pluginTypePath);
-            
-            // 移动到指定类型的插件包 删除已有同名插件
-            command = (pluginPath !== '\/' && fs.existsSync(pluginPath) ? utils.cmd.rm + ' -rf ' + pluginPath + ' && ': '') + 
-                                utils.cmd.mv + " -f " + tmpPluginPath + ' ' + pluginTypePath;
-            utils.excute(command, function(stdout, stderr){
-                command = 'cd ' + pluginPath + ' && npm install';
-                time = '#';
-                utils.excute(command, function(stdout, stderr){
-                    clearInterval(timer);
-                    stdout && console.log(stdout), stderr && console.log(stderr);
-                    utils.log(utils.chalk.green('plugin ' + name + ' installed successfully!'));
-                });
+        try{
+            utils.excute(command, function (stdout, stderr) {
                 stdout && console.log(stdout), stderr && console.log(stderr);
-            });
-        }, utils.chalk.red('load pligins error\t'));
+                try{
+                    var pType = utils.readJson(path.join(tempPath, fs.readdirSync(tempPath)[0], 'package.json'))
+                                    .servermock.type.replace(/[^a-zA-Z]/ig, '');
+                } catch (err){
+                    throw Error('plugin not define type in package.json servermock.type ' + src);
+                    return;
+                }
+                // utils.log(utils.chalk.green('plugin ' + name + ' load success!'));
+                
+                var pluginTypePath = path.join(homeDir, '.servermock/plugins/', pType),
+                    pluginPath = path.join(pluginTypePath, name);
+                utils.mkPath(pluginTypePath);
+                
+                // 移动到指定类型的插件包 删除已有同名插件
+                command = (pluginPath !== '\/' && fs.existsSync(pluginPath) ? utils.cmd.rm + ' -rf ' + pluginPath + ' && ': '') + 
+                                    utils.cmd.mv + " -f " + tmpPluginPath + ' ' + pluginTypePath;
+                utils.excute(command, function(stdout, stderr){
+                    command = 'cd ' + pluginPath + ' && npm install';
+                    time = '#';
+                    utils.excute(command, function(stdout, stderr){
+                        clearInterval(timer);
+                        stdout && console.log(stdout), stderr && console.log(stderr);
+                        utils.log(utils.chalk.green('plugin ' + name + ' installed successfully!'));
+                    });
+                    
+                    utils.log(utils.chalk.green('plugin ' + name + ' load success!'));
+                    stdout && console.log(stdout), stderr && console.log(stderr);
+                });
+            }, utils.chalk.red('load pligins error\t'));
+        } catch(err){
+            clearInterval(timer);
+            utils.log(err);
+        }
     }
 }
 
