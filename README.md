@@ -96,7 +96,7 @@ require('servermock')(config)
 
 1.sm.config支持单行注释"//", 暂不支持多行注释"/**/";<br>
 2.插件按需open;<br>
-3.protocol:启动server服务的协议支持http/https， 当为https是需要传入key和cert两个证书文件;
+3.protocol:启动server服务的协议支持http/https， 当为https是需要传入key和cert两个证书文件;<br>
 4.main提供的话会在start的时候启动浏览器打开服务，不提供则不打开;
 
 更多配置使用请看对应插件 [mock](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md) [pagemock](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md) [synctest](https://github.com/shalles/synctest/blob/master/README.md)
@@ -116,29 +116,29 @@ servermock plugin -i https://github.com/shalles/synctest.git
 
 #### 插件列表
 
-1. mock （默认）
-2. pagemock (默认)
-3. synctest（需安装）
+1. mock （默认）<br>
+2. pagemock (默认)<br>
+3. synctest（需安装）<br>
 4. ...
 
 #### 插件编写
 
-1. 主要实现两个方法init 和 excute;
-2. init的时候可以拿到用户配置sm.config中serverConfig的一些配置和servermock [utils.js](https://github.com/shalles/servermock/blob/master/lib/utils.js)提供的一些使用方法具体可以看源码，虽然写的很差但会慢慢优化。 主要提倡用utils.log
-3. 目前提供了两个插件口content和router 并在excute的时候提供不同的参数和返回值
-4. 在package.json中配置需要servermock提供的支持
+1. 主要实现两个方法init 和 excute;<br>
+2. init的时候可以拿到用户配置sm.config中serverConfig的一些配置和servermock [utils.js](https://github.com/shalles/servermock/blob/master/lib/utils.js)提供的一些使用方法具体可以看源码，虽然写的很差但会慢慢优化。 主要提倡用utils.log; <br>
+3. 目前提供了两个插件口content和router 并在excute的时候提供不同的参数和返回值;<br>
+4. 在package.json中配置需要servermock提供的支持;
 
 **如下以synctest为例**
 
 synctest的主要实现原理 <br>   
-1. 监听页面的事件->编辑事件信息;
-2. 用servermock提供的websocket功能将编辑的事件信息广播到链接的其他设备的打开的页面监听client端
-3. 在接收到事件信息后解析并重构事件
-4. 触发该事件
+1. 监听页面的事件->编辑事件信息;<br>
+2. 用servermock提供的websocket功能将编辑的事件信息广播到链接的其他设备的打开的页面监听client端;<br>
+3. 在接收到事件信息后解析并重构事件;<br>
+4. 触发该事件;<br>
 5. 循环
 
-a. 要在页面监听事件就需要向servermock启动的服务的页面文件中插入脚本，在servemock中属于content类插件即如下package.json中"type"为"content";
-b.需要用到servermock的websocket功能则需要配置websocket的信息这是正对servermock配置的，且高于默认配置，低于用户配置
+a. 要在页面监听事件就需要向servermock启动的服务的页面文件中插入脚本，在servemock中属于content类插件即如下package.json中"type"为"content";<br>
+b.需要用到servermock的websocket功能则需要配置websocket的信息这是正对servermock配置的，且高于默认配置，低于用户配置;<br>
 c.注意:servermock以文件的目录名位插件名，主目录下必须包含主文件index.js和package.json, package.json与node同用，插件使用node module加载 因此写起来和node语法无异
 
 **package.json**
