@@ -89,13 +89,13 @@ page1.php
 
 1. `data|1-10` 随机生成 [1, 10]之间的value， value是数组就生成有[1，10]个元素的数组， value是数字(任意) -> [1,10]间的数字， value是字符串 -> [1, 10]个该字符串叠加<br>
 
-2. 随机数组占位符 MNAME 在 .mockrc文件中配置 "MNAME": ["shalles", "东阳", "小明", "小梅", "乔治"]，可与1叠加使用，即有`token|3-3: @MNAME` 数组中给定的元素随机3个组合的字符串<br>
+2. 随机数组占位符 MNAME 在 `.mockrc`文件中配置 "MNAME": ["shalles", "东阳", "小明", "小梅", "乔治"]，可与1叠加使用，即有`token|3-3: @MNAME` 数组中给定的元素随机3个组合的字符串<br>
 
 更多语法规范，请参考 [ http://mockjs.com/#语法规范 ] (http://mockjs.com/#语法规范)
 
 #### .mockrc文件自定义mockjson随机变量
 
-除了默认的还提供在.mockrc文件中自定义随机变量(*.mjson)
+除了默认的还提供在`.mockrc`文件中自定义随机变量(*.mjson)
 
 ```json
 {
