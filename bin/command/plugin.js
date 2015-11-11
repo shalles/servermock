@@ -5,9 +5,10 @@ var fs = require('fs'),
 var plugin = {
     intall: function(params){
         var src = params[0];
-        if(!src){
-            utils.log(utils.chalk.red('缺少参数\n'),
-                "pligin install [git repository]"
+        if(!src || src == '\/' || src.slice(-4) !== '.git'){
+            utils.log(utils.chalk.red('参数错误\n'),
+                "pligin install|-i [git repository] ",
+                "eg. servermock plugin -i https://github.com/shalles/synctest.git"
             );
             return;
         }
@@ -25,7 +26,7 @@ var plugin = {
         var timer = setInterval(function(){
             console.log(time+= '#');
         }, 1200);
-        command += 'cd ' + tempPath + ' && ' + (fs.existsSync(tmpPluginPath) ? utils.cmd.rm + ' -rf * && ' : '') + 'git clone ' + src;
+        command += 'cd ' + tempPath + ' && ' + (fs.existsSync(tmpPluginPath) ? utils.cmd.rm + tempPath + ' && ' : '') + ' git clone ' + src;
         try{
             utils.excute(command, function (stdout, stderr) {
                 stdout && console.log(stdout), stderr && console.log(stderr);
@@ -43,8 +44,8 @@ var plugin = {
                 utils.mkPath(pluginTypePath);
                 
                 // 移动到指定类型的插件包 删除已有同名插件
-                command = (pluginPath !== '\/' && fs.existsSync(pluginPath) ? utils.cmd.rm + ' -rf ' + pluginPath + ' && ': '') + 
-                                    utils.cmd.mv + " -f " + tmpPluginPath + ' ' + pluginTypePath;
+                command = (pluginPath !== '\/' && fs.existsSync(pluginPath) ? utils.cmd.rm + pluginPath + ' && ': '') + 
+                                    utils.cmd.mv + tmpPluginPath + ' ' + pluginTypePath;
                 utils.excute(command, function(stdout, stderr){
                     command = 'cd ' + pluginPath + ' && npm install';
                     time = '#';

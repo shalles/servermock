@@ -12,12 +12,14 @@ try{
     command.excute(cmds);
 } catch(err){
 
-    utils.log(utils.chalk.red('excute command error\n\tservermock [ command][ param1][ param2]'));
+    utils.log(utils.chalk.red('excute command error\n\t') +
+        utils.chalk.green('servermock [ command][ param1][ param2]'));
+    var n = 0;
     for(var i in command.commands){
-        console.log('servermock ' + i + ' ...');
+        console.log('[' + utils.chalk.cyan(++n) + '] servermock ' + i + ' ...');
     }
     console.log('and the ' + utils.chalk.yellow('sm.config') + ' file like this ',
         fs.readFileSync(path.join(__dirname, '../src/sm.config')).toString(),
-        'more see https://github.com/shalles/servermock/tree/master readme.md');
+        '\nmore see https://github.com/shalles/servermock/tree/master readme.md');
 }
 
