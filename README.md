@@ -1,5 +1,6 @@
 # servermock
-一开始只准备做一个服务和mock数据的小工具，后来发现可以做的事还很多, 更像给大家
+
+一开始只准备做一个`server`和`mock`数据的小工具，后来发现可以做的事还很多, 分享给大家
 
 ## Install
 
@@ -41,7 +42,7 @@ require('servermock')(config)
     "protocol": "http", //https
     //"key": "~/cert/cert.key",
     //"cert": "~cert/cert.crt",
-    "main": "./index.html",
+    "main": "./index.html", //default null, not open
     // 需要使用websocket才配置，使用插件对其有依赖时会覆盖插件的配置
     // "websocket": {  
     //     "open": true,
@@ -94,12 +95,12 @@ require('servermock')(config)
 }
 ```
 
-1.sm.config支持单行注释"//", 暂不支持多行注释"/**/";<br>
-2.插件按需open;<br>
-3.protocol:启动server服务的协议支持http/https， 当为https是需要传入key和cert两个证书文件;<br>
-4.main提供的话会在start的时候启动浏览器打开服务，不提供则不打开;
+1. `sm.config`支持单行注释"//", 暂不支持多行注释"/**/";<br>
+2. 插件按需open;<br>
+3. `protocol`:启动server服务的协议支持`http/https`， 当为https是需要传入key和cert两个证书文件;<br>
+4. main提供的话会在start的时候`启动浏览器打开服务`，不提供则不打开;
 
-更多配置使用请看对应插件 [mock](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md) [pagemock](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md) [synctest](https://github.com/shalles/synctest/blob/master/README.md)
+更多配置使用请看对应插件 [ **mock readme** ](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md) [ **pagemock readme** ](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md) [ **synctest readme** ](https://github.com/shalles/synctest/blob/master/README.md)
 
 ## Plugin
 
@@ -123,10 +124,10 @@ servermock plugin -i https://github.com/shalles/synctest.git
 
 #### 插件编写
 
-1. 主要实现两个方法init 和 excute;<br>
+1. 主要实现两个方法`init` 和 `excute`;<br>
 2. init的时候可以拿到用户配置sm.config中serverConfig的一些配置和servermock [utils.js](https://github.com/shalles/servermock/blob/master/lib/utils.js)提供的一些使用方法具体可以看源码，虽然写的很差但会慢慢优化。 主要提倡用utils.log; <br>
-3. 目前提供了两个插件口content和router 并在excute的时候提供不同的参数和返回值;<br>
-4. 在package.json中配置需要servermock提供的支持;
+3. 目前提供了两个插件口`content`和`router` 并在excute的时候提供不同的参数和返回值;<br>
+4. 在`package.json`中配置需要servermock提供的支持;
 
 **如下以synctest为例**
 
@@ -137,9 +138,9 @@ synctest的主要实现原理 <br>
 4. 触发该事件;<br>
 5. 循环
 
-a. 要在页面监听事件就需要向servermock启动的服务的页面文件中插入脚本，在servemock中属于content类插件即如下package.json中"type"为"content";<br>
-b.需要用到servermock的websocket功能则需要配置websocket的信息这是正对servermock配置的，且高于默认配置，低于用户配置;<br>
-c.注意:servermock以文件的目录名位插件名，主目录下必须包含主文件index.js和package.json, package.json与node同用，插件使用node module加载 因此写起来和node语法无异
+a）. 要在页面监听事件就需要向servermock启动的服务的页面文件中插入脚本，在servemock中属于content类插件即如下package.json中`"type"`为`"content"`;<br>
+b）. 需要用到servermock的websocket功能则需要配置websocket的信息这是正对servermock配置的，且高于默认配置，低于用户配置;<br>
+c）. 注意:servermock以文件的目录名位插件名，主目录下必须包含主文件`index.js`和`package.json`, package.json与node同用，插件使用node module加载 因此写起来和node语法无异
 
 **package.json**
 
@@ -222,4 +223,4 @@ plugins.excute('content', {
 
 [详情参考实例synctest](https://github.com/shalles/synctest)
 
-**[test demo](https://github.com/shalles/servermock/tree/master/test)**
+**[more see the test demo](https://github.com/shalles/servermock/tree/master/test)**
