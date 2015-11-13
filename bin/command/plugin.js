@@ -34,7 +34,7 @@ var plugin = {
                     var pType = utils.readJson(path.join(tempPath, fs.readdirSync(tempPath)[0], 'package.json'))
                                     .servermock.type.replace(/[^a-zA-Z]/ig, '');
                 } catch (err){
-                    throw Error('plugin not define type in package.json servermock.type ' + src);
+                    throw Error('plugin ' + name + ' not define type in package.json servermock.type ' + src);
                     return;
                 }
                 // utils.log(utils.chalk.green('plugin ' + name + ' load success!'));
@@ -58,7 +58,7 @@ var plugin = {
                     utils.log(utils.chalk.green('plugin ' + name + ' load success!'));
                     stdout && console.log(stdout), stderr && console.log(stderr);
                 });
-            }, utils.chalk.red('load pligins error\t'));
+            }, utils.chalk.red('load plugin ' + name + ' error\t'));
         } catch(err){
             clearInterval(timer);
             utils.log(err);
