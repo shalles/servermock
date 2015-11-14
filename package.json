@@ -1,17 +1,18 @@
 {
   "name": "servermock",
-  "version": "2.0.14",
-  "description": "fepro server and mock module",
+  "version": "2.0.15",
+  "description": "not only static server and ajax mock data, support page mock like dynamic page, separation front-end and server. And you can install plugins free",
   "main": "index.js",
   "bin": "./bin/index.js",
   "scripts": {
     "test": "servermock start"
   },
   "keywords": [
-    "fepro",
+    "separation",
     "server",
     "mock",
-    "mockjson"
+    "mockjson",
+    "pagemock"
   ],
   "files": [
     "index.js",
