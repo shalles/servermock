@@ -18,6 +18,9 @@ npm install servermock --save
 //启动命令(start)
 servermock start
 
+//初始化 will generate a sm.config file in current path
+servermock init
+
 //安装删除插件
 servermock plugin [intall | delete] | [-i | -d] [git repository]
 //如:

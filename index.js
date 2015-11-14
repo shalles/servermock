@@ -35,7 +35,12 @@ function servermock(config){
     config.main = config.main && (config.main[0] !== '\/' ? '\/' + config.main : config.main);
 
     // 插件参数处理
-    var pluginList = config.plugins = config.plugins instanceof Array ? config.plugins : [],
+    function pluginInit(){
+        var pluginList = config.plugins = config.plugins instanceof Array ? config.plugins : [],
+            pluginsConfig, temp, serverConfig;
+        
+        if(!pluginList.length) return {};
+        
         pluginsConfig = {__userPluginList: []},
         temp = utils.extend(true, {}, dft, config),
         serverConfig = {
@@ -43,19 +48,22 @@ function servermock(config){
             port: temp.port,
             protocol: temp.protocol
         };
-
-    for(var i = 0, len = pluginList.length; i < len; i++){
-        var name = pluginList[i]['name'], open = pluginList[i]['open'];
-        if(open && name){
-            pluginsConfig.__userPluginList.push(name);
-            pluginsConfig[name] = pluginList[i]['param'] || {};
-            pluginsConfig[name].__serverConfig = serverConfig;
-            pluginsConfig[name].__utils = utils;
+    
+        for(var i = 0, len = pluginList.length; i < len; i++){
+            var name = pluginList[i]['name'], open = pluginList[i]['open'];
+            if(open && name){
+                pluginsConfig.__userPluginList.push(name);
+                pluginsConfig[name] = pluginList[i]['param'] || {};
+                pluginsConfig[name].__serverConfig = serverConfig;
+                pluginsConfig[name].__utils = utils;
+            }
         }
+        // 注册并初始化插件配置返回插件的server配置
+        return pluginList.length ? plugins.init(pluginsConfig) : {};
     }
     
-    // 用户配置 > 注册并初始化插件配置返回插件的server配置 > default
-    config = utils.extend(true, dft, plugins.init(pluginsConfig), config);
+    // 用户配置 > 插件的server配置 > default
+    config = utils.extend(true, dft, pluginInit(), config);
 
     server(config, plugins);
 }
