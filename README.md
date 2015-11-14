@@ -120,9 +120,9 @@ servermock plugin -i https://github.com/shalles/synctest.git
 
 #### 插件列表
 
-1. mock （默认）<br>
-2. pagemock (默认)<br>
-3. synctest（需安装）<br>
+1. [ **mock** ](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md)  `默认自带`<br>
+2. [ **pagemock** ](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md)  `默认自带`<br>
+3. [ **synctest** ](https://github.com/shalles/synctest/blob/master/README.md)  `需安装`<br>
 4. ...
 
 #### 插件编写
@@ -175,7 +175,7 @@ var utils,
 plugin.excute = function (params){
     
     if(utils.inArray(params.ext, acceptExtname)){
-        console.log('[synctest loading]');
+        utils.log('[synctest loading]');
         // do something
         return params.cnt;
     }

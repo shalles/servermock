@@ -12,13 +12,11 @@ function servermock(config){
     var dft = {
         port: 80,
         hostname: "127.0.0.1",
-        protocol: 'http', //https\
-        // key: "~/cert/cert.key",
-        // cert: "~cert/cert.crt",
+        protocol: 'http',
         websocket: {
             open: false
         },
-        "main": ""
+        main: ""
     };
 
     //自动获取IP并作为启动服务源

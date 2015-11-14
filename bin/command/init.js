@@ -27,7 +27,7 @@ module.exports = function(params){
     }
     function doInit(){
         var content = fs.readFileSync(path.join(__dirname, '../../src/init_sm.config'));
-        var pkg = utils.readJson(path.join(__dirname, '../../package.json'));
+        var pkg = utils.readJson(path.join(__dirname, '../../package.json')) || {version: '2.x.x'};
         var comment = ' // servermock config file sm.config for version ' + pkg['version'] + '\n';
         
         content = comment + content;
