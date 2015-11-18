@@ -15,7 +15,7 @@ npm install servermock --save
 ## Usage
 
 ```shell
-//启动命令(start)
+//启动命令(start) 可跟参数 -p 8089（port） | -i index.html（启动页面）
 servermock start
 
 //初始化 will generate a sm.config file in current path
