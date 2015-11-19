@@ -20,7 +20,7 @@ module.exports = function(params){
                 }
                 break;
             case '-i':
-                config.main = params[i++];
+                config.main = params[i++] || 'index.html';
                 break;
             default: 
                 break;
