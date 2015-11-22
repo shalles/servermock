@@ -22,6 +22,17 @@ module.exports = function(params){
             case '-i':
                 config.main = params[i++] || 'index.html';
                 break;
+            case '@p':
+                var plu = params[i++], pluConfig;
+                if(!plu){
+                    throw Error('param error: please specify a plugin name to start');
+                }
+                config.main = '@plugin=' + plu;
+                config.plugins = utils.classof(config.plugins) === 'Array' ? config.plugins : [];
+                pluConfig = (pluConfig = utils.findObjectInArray(
+                                         config.plugins, 'name', plu)) ? pluConfig : {'name': plu};
+
+                pluConfig['open'] = true;
             default: 
                 break;
         }
