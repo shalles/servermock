@@ -33,6 +33,8 @@ module.exports = function(params){
                                          config.plugins, 'name', plu)) ? pluConfig : {'name': plu};
 
                 pluConfig['open'] = true;
+                config.plugins.push(pluConfig);
+                break;
             default: 
                 break;
         }

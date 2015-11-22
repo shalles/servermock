@@ -15,7 +15,7 @@ npm install servermock --save
 ## Usage
 
 ```shell
-//启动命令(start) 可跟参数 -p 8089（port） | -i index.html（启动页面）
+//启动命令(start) 可跟参数 -p 8089（port） | -i index.html（启动页面） @p pluginname (插件名)
 servermock start
 
 //初始化 will generate a sm.config file in current path
@@ -150,6 +150,7 @@ c）. 注意:servermock以文件的目录名位插件名，主目录下必须包
 ```json
     "servermock": {
         "type": "content",
+        //"startbasepath": "./", 需要使用启动命令的插件  如 servermock start -p 8800 @p transport
         "websocket": {
             "open": true,
             "maxsize": 10240,
@@ -188,6 +189,12 @@ plugin.init = function(config){
     acceptExtname = config.exts || ['html', 'htm'];
     origin = (config.vpn || serverConfig.hostname) + ":" + serverConfig.port;
     protocol = serverConfig.protocol
+
+    /* 使用@p 插件启动参数的插件可能需要传入一些参数
+    return {
+        dirname: __dirname
+    }
+    */
 }
 
 module.exports = plugin;
