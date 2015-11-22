@@ -30,8 +30,6 @@ function servermock(config){
         }
     }
 
-    config.main = config.main && (config.main[0] !== '\/' ? '\/' + config.main : config.main);
-
     // 插件参数处理
     function pluginInit(){
         var pluginList = config.plugins = config.plugins instanceof Array ? config.plugins : [],
@@ -60,10 +58,24 @@ function servermock(config){
         return pluginList.length ? plugins.init(pluginsConfig) : {};
     }
     
+    var pluginNeed = pluginInit();
     // 用户配置 > 插件的server配置 > default
-    config = utils.extend(true, dft, pluginInit(), config);
+    config = utils.extend(true, dft, pluginNeed, config);
 
-    server(config, plugins);
+    var startParam;
+    try{
+        startParam = config.main.split('=');
+        if(startParam[0] === '@plugin' && pluginNeed['startbase']){
+            buildPath = pluginNeed['startbase'][startParam[1]];
+            config.main = 'index.html'
+        }
+    } catch(err){
+        throw Error('plugin-' + startParam[1] + ' start faild');
+    }
+
+    config.main = config.main && (config.main[0] !== '\/' ? '\/' + config.main : config.main);
+
+    server(config, buildPath, plugins);
 }
 
 module.exports = servermock;
