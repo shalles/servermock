@@ -18,9 +18,9 @@ function servermock(config){
         },
         main: ""
     };
-
+    
     //自动获取IP并作为启动服务源
-    if(config.hostname === "0.0.0.0"){
+    if(config.hostname === "0.0.0.0" || config.websocket.open){
         var IP = os.networkInterfaces().en0
         for(var i = 0, len = IP.length; i < len; i++){
             if(IP[i].family === "IPv4"){
@@ -29,7 +29,7 @@ function servermock(config){
             }
         }
     }
-
+    
     // 插件参数处理
     function pluginInit(){
         var pluginList = config.plugins = config.plugins instanceof Array ? config.plugins : [],
