@@ -1,4 +1,3 @@
-/* global process */
 var path = require('path'),
     utils = require('../../lib/utils.js'),
     servermock = require('../../index.js');
@@ -33,7 +32,7 @@ module.exports = function(params){
                 pluConfig = (pluConfig = utils.findObjectInArray(
                                          config.plugins, 'name', plu)) ? pluConfig : {'name': plu};
 
-                pluConfig['open'] = true;
+                pluConfig.open = true;
                 config.plugins.push(pluConfig);
                 break;
             default: 

@@ -20,7 +20,7 @@ function servermock(config){
     };
     
     //自动获取IP并作为启动服务源
-    if(config.hostname === "0.0.0.0" || config.websocket.open){
+    if(config.hostname === "0.0.0.0"){
         var IP = os.networkInterfaces().en0
         for(var i = 0, len = IP.length; i < len; i++){
             if(IP[i].family === "IPv4"){
