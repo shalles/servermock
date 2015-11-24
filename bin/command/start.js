@@ -22,6 +22,11 @@ module.exports = function(params){
             case '-i':
                 config.main = params[i++] || 'index.html';
                 break;
+            case '-n': 
+                if(params[i++] === 'auto'){
+                    config.hostname = '0.0.0.0';
+                }
+                break;
             case '@p':
                 var plu = params[i++], pluConfig;
                 if(!plu){
@@ -35,7 +40,14 @@ module.exports = function(params){
                 pluConfig.open = true;
                 config.plugins.push(pluConfig);
                 break;
-            default: 
+            default:
+                utils.log(
+                    utils.chalk.red('param ' + utils.chalk.cyan(params[i-1]) + ' is not supported will be ignore'),
+                    '\n-p\tport. such -p 8080',
+                    '\n-i\tindex file. such -i view/index.html',
+                    '\n-n\thostname. such -n auto(auto IP)',
+                    '\n@p\tstart plugin. such @p transport'
+                );
                 break;
         }
     }
