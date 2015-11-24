@@ -1,3 +1,4 @@
+/* global process */
 var path = require('path'),
     utils = require('../../lib/utils.js'),
     servermock = require('../../index.js');
@@ -8,7 +9,7 @@ module.exports = function(params){
     var configPath = path.join(cwd, 'sm.config'),
         config = utils.readJson(configPath) || {};
     
-    console.log("params: ", params)
+    console.log("params: ", params);
     var i = 0;
     while(params[i]){
         switch(params[i++]){
@@ -43,4 +44,4 @@ module.exports = function(params){
     utils.log(utils.chalk.green('start with config\n'), config);
 
     servermock(config);
-}
+};
