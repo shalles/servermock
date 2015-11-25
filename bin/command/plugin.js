@@ -35,7 +35,6 @@ var plugin = {
                                     .servermock.type.replace(/[^a-zA-Z]/ig, '');
                 } catch (err){
                     throw Error('plugin ' + name + ' not define type in package.json servermock.type ' + src);
-                    return;
                 }
                 // utils.log(utils.chalk.green('plugin ' + name + ' load success!'));
                 
@@ -64,7 +63,7 @@ var plugin = {
             utils.log(err);
         }
     }
-}
+};
 
 plugin['-i'] = plugin.intall;
 plugin['-d'] = plugin.delete;
@@ -82,4 +81,4 @@ module.exports = function(params){
     }
     
     plugin[cmd](params);
-}
+};
