@@ -27,6 +27,9 @@ module.exports = function(params){
                     config.hostname = '0.0.0.0';
                 }
                 break;
+            case '-py':
+                config.proxy = true;
+                break;
             case '@p':
                 var plu = params[i++], pluConfig;
                 if(!plu){
@@ -46,6 +49,7 @@ module.exports = function(params){
                     '\n-p\tport. such -p 8080',
                     '\n-i\tindex file. such -i view/index.html',
                     '\n-n\thostname. such -n auto(auto IP)',
+                    '\n-py\tproxy. such -py(start proxy module)',
                     '\n@p\tstart plugin. such @p transport'
                 );
                 break;

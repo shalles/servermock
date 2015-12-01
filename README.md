@@ -15,7 +15,9 @@ npm install servermock --save
 ## Usage
 
 ```shell
-//启动命令(start) 可跟参数 -p 8089（port） | -i index.html（启动页面） @p pluginname (插件名)
+//启动命令(start) 可跟参数 -p 8089（port） | -i index.html（启动页面）| 
+//@p pluginname (插件名) | -py (open/support proxy) | -n auto (时自
+//动获取当前IPv4作为hostname)
 servermock start
 
 //初始化 will generate a sm.config file in current path
