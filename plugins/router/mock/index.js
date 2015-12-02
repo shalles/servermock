@@ -8,7 +8,7 @@ plugin.excute = function(params){
     return plugin.mock.mockResponse(
             plugin.mock.getMockData(params.pathname, params.extname), 
                 params.req, params.res, serverConfig);
-}
+};
 
 plugin.init = function(config){
     var mockrc = config.mockrc,
@@ -20,6 +20,6 @@ plugin.init = function(config){
     //config.mock.pagepath = pagepath && (path.isAbsolute(pagepath) ? pagepath: path.resolve(config.mock.datapath, pagepath));
 
     plugin.mock = new Mock(config);
-}
+};
 
 module.exports = plugin;

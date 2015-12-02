@@ -21,7 +21,7 @@ function servermock(config){
     
     //自动获取IP并作为启动服务源
     if(config.hostname === "0.0.0.0"){
-        var IP = os.networkInterfaces().en0
+        var IP = os.networkInterfaces().en0;
         for(var i = 0, len = IP.length; i < len; i++){
             if(IP[i].family === "IPv4"){
                 config.hostname = IP[i].address;
@@ -37,8 +37,8 @@ function servermock(config){
         
         if(!pluginList.length) return {};
         
-        pluginsConfig = {__userPluginList: []},
-        temp = utils.extend(true, {}, dft, config),
+        pluginsConfig = {__userPluginList: []};
+        temp = utils.extend(true, {}, dft, config);
         serverConfig = {
             hostname: temp.hostname,
             port: temp.port,
@@ -46,10 +46,10 @@ function servermock(config){
         };
     
         for(var i = 0, len = pluginList.length; i < len; i++){
-            var name = pluginList[i]['name'], open = pluginList[i]['open'];
+            var plu = pluginList[i], name = plu.name, open = plu.open;
             if(open && name){
                 pluginsConfig.__userPluginList.push(name);
-                pluginsConfig[name] = pluginList[i]['param'] || {};
+                pluginsConfig[name] = plu.param || {};
                 pluginsConfig[name].__serverConfig = serverConfig;
                 pluginsConfig[name].__utils = utils;
             }
@@ -65,9 +65,9 @@ function servermock(config){
     var startParam;
     try{
         startParam = config.main.split('=');
-        if(startParam[0] === '@plugin' && pluginNeed['startbase']){
-            buildPath = pluginNeed['startbase'][startParam[1]];
-            config.main = 'index.html'
+        if(startParam[0] === '@plugin' && pluginNeed.startbase){
+            buildPath = pluginNeed.startbase[startParam[1]];
+            config.main = 'index.html';
         }
     } catch(err){
         throw Error('plugin-' + startParam[1] + ' start faild');
