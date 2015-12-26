@@ -21,7 +21,8 @@ function servermock(config){
     
     //自动获取IP并作为启动服务源
     if(config.hostname === "0.0.0.0"){
-        var IP = os.networkInterfaces().en0;
+        var netif = os.networkInterfaces();
+        var IP = netif.en0 || netif.eth0 || netif.WLAN;
         for(var i = 0, len = IP.length; i < len; i++){
             if(IP[i].family === "IPv4"){
                 config.hostname = IP[i].address;
