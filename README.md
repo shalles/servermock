@@ -1,7 +1,5 @@
 # servermock
 
-[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Support us][gittip-image]][gittip-url] [![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url] [![Gitter chat][gitter-image]][gitter-url]
-
 一开始只准备做一个`server`和`mock`数据的小工具，后来发现可以做的事还很多, 分享给大家
 
 ## Install
