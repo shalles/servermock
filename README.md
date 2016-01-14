@@ -1,5 +1,7 @@
 # servermock
 
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Support us][gittip-image]][gittip-url] [![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url] [![Gitter chat][gitter-image]][gitter-url]
+
 一开始只准备做一个`server`和`mock`数据的小工具，后来发现可以做的事还很多, 分享给大家
 
 ## Install
@@ -149,7 +151,7 @@ c）. 注意:servermock以文件的目录名位插件名，主目录下必须包
 
 **package.json**
 
-```json
+```js
     "servermock": {
         "type": "content",
         //"startbasepath": "./", 需要使用启动命令的插件  如 servermock start -p 8800 @p transport
