@@ -6,7 +6,7 @@ var path = require('path'),
 plugin.excute = function(params){
 
     return plugin.mock.mockResponse(
-            plugin.mock.getMockData(params.pathname, params.extname), 
+            plugin.mock.getMockData(params.urlpathname, params.extname), 
                 params.req, params.res, serverConfig);
 };
 
