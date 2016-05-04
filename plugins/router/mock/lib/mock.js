@@ -108,7 +108,7 @@ MockData.prototype = {
                     //extname === 'html' && utils.log(utils.chalk.green(req, '\n\n\n\n', req.wwwurl))
                     req.wwwurl.queryObj = query;
                     //utils.log(utils.chalk.green('----------mock js func:\n', data.cnt.toString()));
-                    vm.runInThisContext('(' + data.cnt + ')')(req, res);
+                    vm.runInThisContext('(' + data.cnt + ')')(req, res, require);
                     break;
                 default:
                     utils.log(utils.chalk.yellow("mock 暂只支持.mjson .json .js文件"));
