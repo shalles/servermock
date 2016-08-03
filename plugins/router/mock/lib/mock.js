@@ -37,7 +37,7 @@ MockData.prototype = {
     initMockRandom: function(mockrcpath){
         utils.log(utils.chalk.green("plugin-mock mockrcpath:\n"), mockrcpath)
         var mockRandom = fs.existsSync(mockrcpath) ? 
-                            JSON.parse(clearJs(fs.readFileSync(mockrcpath))) : {};
+                            JSON.parse(clearJs(fs.readFileSync(mockrcpath).toString())) : {};
 
         for(var i in mockRandom){
             var randomData = {}, 
@@ -73,7 +73,7 @@ MockData.prototype = {
             for(var i in mockItems){
                 var item = mockItems[i];
                 if(item.reg.test(url)){
-                    cnt = clearJs(fs.readFileSync(item.data));
+                    cnt = clearJs(fs.readFileSync(item.data).toString());
                     type = path.extname(item.data).slice(1);
                     break;
                 }
