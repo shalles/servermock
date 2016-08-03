@@ -1,7 +1,5 @@
 # servermock
 
-一开始只准备做一个`server`和`mock`数据的小工具，后来发现可以做的事还很多, 分享给大家
-
 ## Install
 
 ```shell
@@ -73,6 +71,7 @@ require('servermock')(config)
             "datapath": "mock/",
             "mockrc": ".mockrc", //相对mock datapath 可用绝对路径
             "ignore": ["html", "jpg", "png", "gif"],
+            "acao": true, //Access-Control-Allow-Origin default:true
             "regexurl": { //前面是regex new RegExp()
                 "com/api/mockdata.do": "mockdata.mjson",
                 "/static/webapp/src/": "filemock.js",

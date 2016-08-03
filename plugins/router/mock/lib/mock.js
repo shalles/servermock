@@ -11,6 +11,7 @@ function MockData(opt){
     opt = utils.extend(true, {
         datapath: path.join(process.cwd() + "mock/"),
         mockrc: ".mockrc", //相对mock datapath
+        acao: true, // Access-Control-Allow-Origin
         ignore: ['html', 'js', 'css', 'jpg', 'png', 'gif'],
         regexurl: { //前面是regex new RegExp()
         }
@@ -20,7 +21,8 @@ function MockData(opt){
 }
 
 MockData.prototype = {
-    init: function(opt){        
+    init: function(opt){
+        this.acao = opt.acao;    
         this.ignore = opt.ignore;
         this.mockItems = this.convertRegexURL(opt.datapath, opt.regexurl);
         this.initMockRandom(path.isAbsolute(opt.mockrc)? opt.mockrc : path.join(opt.datapath, opt.mockrc));
@@ -83,11 +85,13 @@ MockData.prototype = {
             switch(data.type){
                 case 'mjson': //处理mockjson
                     //utils.log(utils.chalk.green(mockjs.mock(JSON.parse(data.cnt))))
+                    this.acao && res.setHeader("Access-Control-Allow-Origin","*");
                     data.cnt = JSON.stringify(mockjs.mock(JSON.parse(data.cnt)), null, 4);
                 case 'json':
                     res.writeHead(200, {
                         'Content-Type': utils.MIME['json']
                     });
+                    this.acao && res.setHeader("Access-Control-Allow-Origin","*");
                     res.write(data.cnt);
                     res.end();
                     break;
