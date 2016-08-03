@@ -6,6 +6,13 @@ var fs = require('fs'),
     mockjs = require('mockjs'),
     utils;
 
+function clearJs(str){
+    var reg = /("([^\\\"]*(\\.)?)*")|('([^\\\']*(\\.)?)*')|(\/{2,}.*?(\r|\n))|(\/\*(\n|.)*?\*\/)/g;
+    return str.replace(reg, function(word) {
+        return /^\/{2,}/.test(word) || /^\/\*/.test(word) ? "" : word;
+    });
+}
+
 function MockData(opt){
     utils = opt.__utils;
     opt = utils.extend(true, {
@@ -30,7 +37,7 @@ MockData.prototype = {
     initMockRandom: function(mockrcpath){
         utils.log(utils.chalk.green("plugin-mock mockrcpath:\n"), mockrcpath)
         var mockRandom = fs.existsSync(mockrcpath) ? 
-                            JSON.parse(fs.readFileSync(mockrcpath)) : {};
+                            JSON.parse(clearJs(fs.readFileSync(mockrcpath))) : {};
 
         for(var i in mockRandom){
             var randomData = {}, 
@@ -66,7 +73,7 @@ MockData.prototype = {
             for(var i in mockItems){
                 var item = mockItems[i];
                 if(item.reg.test(url)){
-                    cnt = fs.readFileSync(item.data);
+                    cnt = clearJs(fs.readFileSync(item.data));
                     type = path.extname(item.data).slice(1);
                     break;
                 }
