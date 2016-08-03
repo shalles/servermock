@@ -88,10 +88,10 @@ MockData.prototype = {
                     this.acao && res.setHeader("Access-Control-Allow-Origin","*");
                     data.cnt = JSON.stringify(mockjs.mock(JSON.parse(data.cnt)), null, 4);
                 case 'json':
+                    this.acao && res.setHeader("Access-Control-Allow-Origin","*");
                     res.writeHead(200, {
                         'Content-Type': utils.MIME['json']
                     });
-                    this.acao && res.setHeader("Access-Control-Allow-Origin","*");
                     res.write(data.cnt);
                     res.end();
                     break;
