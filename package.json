@@ -1,6 +1,6 @@
 {
   "name": "servermock",
-  "version": "2.1.12",
+  "version": "2.1.13",
   "description": "not only static server and ajax mock data, support page mock like dynamic page, separation front-end and server. And you can install plugins free",
   "main": "index.js",
   "bin": "./bin/index.js",
