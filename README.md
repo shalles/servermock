@@ -3,76 +3,73 @@
 ## Install
 
 ```shell
-sudo npm install servermock -g  
+$ sudo npm install servermock -g
 
-//也可以当做node_module来引用到自己的工具中
-npm install servermock --save
+```
+** or **
+
+```shell
+# as a node_module like require('servermock')(config)
+$ npm install servermock -save //--save-dev
 
 ```
 
 ## Usage
 
+** start servermock **
+
 ```shell
-//启动命令(start) 可跟参数 -p 8089（port） | -i index.html（启动页面）| 
-//@p pluginname (插件名) | -py (open/support proxy) | -n auto (时自
-//动获取当前IPv4作为hostname)
-servermock start
+$ servermock start
+# params(you can config your sm.config):
+# -p 8089（port）
+# -i index.html (auto start the index.html page use your default browser)
+# -n auto (auto fetch your wifi or wlan ip)
+# @p synctest (synctest is the plugin name)
 
-//初始化 will generate a sm.config file in current path
-servermock init
+```
 
-//安装删除插件
-servermock plugin [intall | delete] | [-i | -d] [git repository]
-//如:
+** servermock init **
+
+```shell
+$ servermock init
+# init will generate a sm.config file in current path
+
+```
+
+** servermock plugin **
+
+```shell
+$ servermock plugin
+# params
+# [intall | delete] | [-i | -d] [git repository]
 servermock plugin intall https://github.com/shalles/synctest.git
-//或
+# or
 servermock plugin -i https://github.com/shalles/synctest.git
-
-
-//或作为node模块使用
-require('servermock')(config)
 
 ```
 
 ## Config
 
-启动目录下的配置文件 sm.config
+start root path/sm.config
 
 ```js
 {
-    "port": 8080, // 启动端口 默认80 unix系需要sudo
-    "hostname": "0.0.0.0", // 当为0.0.0.0时自动获取当前IPv4
+    "port": 8080, // start port default 80 unix need sudo
+    "hostname": "0.0.0.0", // if set '0.0.0.0' auto fecth IPv4
     "protocol": "http", //https
-    //"key": "~/cert/cert.key",
-    //"cert": "~cert/cert.crt",
-    "main": "./index.html", //default null, not open
-    // 需要使用websocket才配置，使用插件对其有依赖时会覆盖插件的配置
-    // "websocket": {  
-    //     "open": true,
-    //     "maxsize": 10240,
-    //     "encoding": "utf8",
-    //     // callback: "console.log('outside: ', data); return 'get data ' + data;",
-    //     // callback: function(data){
-    //     //     console.log('outside: ', data);
-    //     //     return 'get data ' + data;
-    //     // },
-    //     "originReg": "", //new RegExp 服务接受原正则匹配
-    //     "sameOrigin": true, // 使用同源发送 default: true
-    //     "broadcast": true, // 是否广播
-    //     "mTm": false, //是否广播到自己
-    //     "debug": false //log
-    // },
-    // 
-    // 插件 
+    //"key": "~/cert/cert.key", // if protocol set to https
+    //"cert": "~cert/cert.crt", // if protocol set to https
+    "main": "./index.html", // auto start the index.html page use your default browser. default do nothing
+    // plugins 
     "plugins":[{
         "name": "mock",
         "open": true,
         "param": {
             "datapath": "mock/",
-            "mockrc": ".mockrc", //相对mock datapath 可用绝对路径
-            "ignore": ["html", "jpg", "png", "gif"],
+            "mockrc": ".mockrc", // relative to mock datapath. certainly, you can use absolute path
+            "ignore": ["html", "jpg", "png", "gif"], // ignore file extname
             "acao": true, //Access-Control-Allow-Origin default:true
-            "regexurl": { //前面是regex new RegExp()
+            "regexurl": { //patch mock url to local mock file.  support regular expression, use new RegExp(path)
                 "com/api/mockdata.do": "mockdata.mjson",
                 "/static/webapp/src/": "filemock.js",
                 "/api/1placesuggestion" : "placesuggestion.js", //走js 遵循cmd
@@ -84,11 +81,13 @@ require('servermock')(config)
         "name": "pagemock",
         "open": true,
         "param": {
-            "basepath": "mock/page", //"", //default: 同级目录
-            "mockrc": "../.mockrc", //基于basepath 可与mock同用 可用绝对路径
-            "acceptExts": ["php", "html", "vm"] //监听的页面扩展
+            "basepath": "mock/page", //"", //default: same path width page
+            "mockrc": "../.mockrc", // relative to mock basepath. certainly, you can use absolute path
+            "acceptExts": ["php", "html", "vm"] //listen page extname
         }
-    },{// 需要单独安装 servermock plugin -i https://github.com/shalles/synctest.git
+    },{
+        // need install, such servermock plugin -i https://github.com/shalles/synctest.git
+        // synchronous the operation with multiple instances in different devices
         "name": "synctest", 
         "open": true,
         "param": {
@@ -99,8 +98,8 @@ require('servermock')(config)
 }
 ```
 
-1. `sm.config`支持单行注释"//", 暂不支持多行注释"/**/";<br>
-2. 插件按需open;<br>
+1. `sm.config` support simple comments "//";<br>
+2. plugin on/off free;<br>
 3. `protocol`:启动server服务的协议支持`http/https`， 当为https是需要传入key和cert两个证书文件;<br>
 4. main提供的话会在start的时候`启动浏览器打开服务`，不提供则不打开;
 
@@ -119,14 +118,14 @@ servermock plugin intall https://github.com/shalles/synctest.git
 servermock plugin -i https://github.com/shalles/synctest.git
 ```
 
-#### 插件列表
+#### Plugin List
 
-1. [ **mock** ](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md)  `默认自带`<br>
-2. [ **pagemock** ](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md)  `默认自带`<br>
-3. [ **synctest** ](https://github.com/shalles/synctest/blob/master/README.md)  `需安装`<br>
+1. [ **mock** ](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md)  `default`<br>
+2. [ **pagemock** ](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md)  `default`<br>
+3. [ **synctest** ](https://github.com/shalles/synctest/blob/master/README.md)  `need install`<br>
 4. ...
 
-#### 插件编写
+#### How To
 
 1. 主要实现两个方法`init` 和 `excute`;<br>
 2. init的时候可以拿到用户配置sm.config中serverConfig的一些配置和servermock [utils.js](https://github.com/shalles/servermock/blob/master/lib/utils.js)提供的一些使用方法具体可以看源码，虽然写的很差但会慢慢优化。 主要提倡用utils.log; <br>

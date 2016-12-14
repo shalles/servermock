@@ -11,30 +11,35 @@ var buildPath = process.cwd();
 function servermock(config){
     var dft = {
         port: 80,
-        hostname: "127.0.0.1",
+        hostname: '127.0.0.1',
         protocol: 'http',
         websocket: {
             open: false
         },
-        main: ""
+        main: ''
     };
     
-    //自动获取IP并作为启动服务源
-    if(config.hostname === "0.0.0.0"){
-        try{
-            var netif = os.networkInterfaces();
-            var IP = netif.en0 || netif.eth0 || netif.WLAN;
-            for(var i = 0, len = IP.length; i < len; i++){
-                if(IP[i].family === "IPv4"){
-                    config.hostname = IP[i].address;
-                    break;
+    (function () {
+        //自动获取IP并作为启动服务源
+        if(config.hostname === '0.0.0.0'){
+            try{
+                var NETs = os.networkInterfaces();
+                for (var net in NETs) {
+                    if (['lo', 'lo0'].indexOf(net) > -1) continue;
+                    var IPs = NETs[net];
+                    for (var i = 0, len = IPs.length; i < len; i++) {
+                        if (IPs[i].family === 'IPv4') {
+                            config.hostname = IPs[i].address;
+                            return;
+                        }
+                    }
                 }
+            } catch(e){
+                config.hostname = '127.0.0.1';
+                utils.log(utils.chalk.yellow('please open your Wi-Fi and restert. now use default config server on 127.0.0.1'));
             }
-        } catch(e){
-            config.hostname = '127.0.0.1';
-            utils.log(utils.chalk.yellow("please open your Wi-Fi and restert. now use default config server on 127.0.0.1"));
         }
-    }
+    })();
     
     // 插件参数处理
     function pluginInit(){
