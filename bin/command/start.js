@@ -26,6 +26,7 @@ module.exports = function(params){
                 if(params[i++] === 'auto'){
                     config.hostname = '0.0.0.0';
                 }
+                config.hostname = params[i]
                 break;
             case '-py':
                 config.proxy = true;
