@@ -11,7 +11,7 @@ var buildPath = process.cwd();
 function servermock(config){
     var dft = {
         port: 80,
-        hostname: '127.0.0.1',
+        hostname: 'localhost',
         protocol: 'http',
         websocket: {
             open: false
@@ -35,7 +35,7 @@ function servermock(config){
                     }
                 }
             } catch(e){
-                config.hostname = '127.0.0.1';
+                config.hostname = 'localhost';
                 utils.log(utils.chalk.yellow('please open your Wi-Fi and restert. now use default config server on 127.0.0.1'));
             }
         }
