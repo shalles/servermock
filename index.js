@@ -36,7 +36,7 @@ function servermock(config){
                 }
             } catch(e){
                 config.hostname = 'localhost';
-                utils.log(utils.chalk.yellow('please open your Wi-Fi and restert. now use default config server on 127.0.0.1'));
+                utils.log(utils.chalk.yellow('please open your Wi-Fi and restart. now use default config server on localhost'));
             }
         }
     })();
