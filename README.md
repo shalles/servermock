@@ -105,11 +105,11 @@ start root path/sm.config
 
 更多配置使用请看对应插件 
 
-[ **mock readme** ](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md)   
+[ **mock 配置请参考readme** ](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md)   
 
-[ **pagemock readme** ](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md)    
+[ **pagemock 配置请参考readme** ](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md)    
 
-[ **synctest readme** ](https://github.com/shalles/synctest/blob/master/README.md)
+[ **synctest 配置请参考readme** ](https://github.com/shalles/synctest/blob/master/README.md)
 
 #### webpack(dev-server)中使用Demo
 
@@ -167,9 +167,9 @@ servermock plugin -i https://github.com/shalles/synctest.git
 
 #### Plugin List
 
-1. [ **mock配置请参考**](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md)  `default`<br>
-2. [ **pagemock配置请参考** ](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md)  `default`<br>
-3. [ **synctest配置请参考** ](https://github.com/shalles/synctest/blob/master/README.md)  `need install`<br>
+1. [ **mock**](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md)  `default`<br>
+2. [ **pagemock** ](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md)  `default`<br>
+3. [ **synctest** ](https://github.com/shalles/synctest/blob/master/README.md)  `need install`<br>
 4. ...
 
 #### How To
