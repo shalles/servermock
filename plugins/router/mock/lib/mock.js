@@ -16,13 +16,16 @@ function clearJs(str){
 function MockData(opt){
     utils = opt.__utils;
     opt = utils.extend(true, {
-        datapath: path.join(process.cwd() + "mock/"),
+        datapath: "mock",
         mockrc: ".mockrc", //相对mock datapath
         acao: true, // Access-Control-Allow-Origin
         ignore: ['html', 'js', 'css', 'jpg', 'png', 'gif'],
         regexurl: { //前面是regex new RegExp()
         }
     }, opt);
+
+    opt.datapath = path.isAbsolute(opt.datapath) ? opt.datapath : path.join(process.cwd(), opt.datapath);
+    opt.mockrc = path.isAbsolute(opt.mockrc) ? opt.mockrc : path.join(opt.datapath, opt.mockrc);
 
     this.init(opt);
 }
@@ -32,7 +35,7 @@ MockData.prototype = {
         this.acao = opt.acao;    
         this.ignore = opt.ignore;
         this.mockItems = this.convertRegexURL(opt.datapath, opt.regexurl);
-        this.initMockRandom(path.isAbsolute(opt.mockrc)? opt.mockrc : path.join(opt.datapath, opt.mockrc));
+        this.initMockRandom(opt.mockrc);
     },
     initMockRandom: function(mockrcpath){
         utils.log(utils.chalk.green("plugin-mock mockrcpath:\n"), mockrcpath)

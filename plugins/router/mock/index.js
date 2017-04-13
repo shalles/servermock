@@ -11,12 +11,12 @@ plugin.excute = function(params){
 };
 
 plugin.init = function(config){
-    var mockrc = config.mockrc,
-        mockpath = config.datapath;
+    // var mockrc = config.mockrc,
+        // mockpath = config.datapath;
 
     serverConfig = config.__serverConfig || {};
-    config.datapath = path.isAbsolute(mockpath) ? mockpath : path.resolve(process.cwd(), mockpath);
-    config.mockrc = path.isAbsolute(mockrc) ? mockrc : path.join(config.datapath, mockrc);
+    // config.datapath = path.isAbsolute(mockpath) ? mockpath : path.resolve(process.cwd(), mockpath);
+    // config.mockrc = path.isAbsolute(mockrc) ? mockrc : path.join(config.datapath, mockrc);
     //config.mock.pagepath = pagepath && (path.isAbsolute(pagepath) ? pagepath: path.resolve(config.mock.datapath, pagepath));
 
     plugin.mock = new Mock(config);

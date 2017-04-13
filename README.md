@@ -19,7 +19,7 @@ $ npm install servermock -save //--save-dev
 ** start servermock **
 
 ```shell
-$ servermock start
+$ servermock start # or sm start
 # params(you can config your sm.config):
 # -p 8089（port）
 # -i index.html (auto start the index.html page use your default browser)
@@ -31,7 +31,7 @@ $ servermock start
 ** servermock init **
 
 ```shell
-$ servermock init
+$ servermock init  # or sm init
 # init will generate a sm.config file in current path
 
 ```
@@ -39,7 +39,7 @@ $ servermock init
 ** servermock plugin **
 
 ```shell
-$ servermock plugin
+$ servermock plugin # or sm plugin
 # params
 # [intall | delete] | [-i | -d] [git repository]
 servermock plugin intall https://github.com/shalles/synctest.git
@@ -65,8 +65,8 @@ start root path/sm.config
         "name": "mock",
         "open": true,
         "param": {
-            "datapath": "mock/",
-            "mockrc": ".mockrc", // relative to mock datapath. certainly, you can use absolute path
+            "datapath": "mock/", // default process.cwd()/mock/
+            "mockrc": ".mockrc", // relative to mock datapath. certainly, you can use absolute path. default process.cwd()/mock/.mockrc
             "ignore": ["html", "jpg", "png", "gif"], // ignore file extname
             "acao": true, //Access-Control-Allow-Origin default:true
             "regexurl": { //patch mock url to local mock file.  support regular expression, use new RegExp(path)
@@ -81,8 +81,8 @@ start root path/sm.config
         "name": "pagemock",
         "open": true,
         "param": {
-            "basepath": "mock/page", //"", //default: same path width page
-            "mockrc": "../.mockrc", // relative to mock basepath. certainly, you can use absolute path
+            "basepath": "mock/page", //"", //default: same path with page
+            "mockrc": "../.mockrc", // relative to mock basepath. certainly, you can use absolute path or share same .mockrc file with plugin mock such process.cwd()/mock/.mockrc
             "acceptExts": ["php", "html", "vm"] //listen page extname
         }
     },{
@@ -103,7 +103,53 @@ start root path/sm.config
 3. `protocol`:启动server服务的协议支持`http/https`， 当为https是需要传入key和cert两个证书文件;<br>
 4. main提供的话会在start的时候`启动浏览器打开服务`，不提供则不打开;
 
-更多配置使用请看对应插件 [ **mock readme** ](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md) [ **pagemock readme** ](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md) [ **synctest readme** ](https://github.com/shalles/synctest/blob/master/README.md)
+更多配置使用请看对应插件 
+
+[ **mock readme** ](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md)   
+
+[ **pagemock readme** ](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md)    
+
+[ **synctest readme** ](https://github.com/shalles/synctest/blob/master/README.md)
+
+#### webpack(dev-server)中使用Demo
+
+```js
+// 在dev-server启动后或之前加入
+config.mock = {
+    port: 8880, // 启动端口 默认80 unix系需要sudo
+    hostname: 'localhost', // 当为0.0.0.0时自动获取当前IPv4
+    protocol: 'http',
+    plugins: [{
+      name: 'mock',
+      open: true,
+      param: {
+        datapath: 'mock/',
+        mockrc: '.mockrc', // 相对mock datapath 可用绝对路径
+        regexurl: {
+          'api/getabc': 'getabc.js',
+          'api/getabc2': 'getabc2.json',
+          'api/getabc3': 'getabc3.mjson',
+        }
+      }
+    }]
+}
+require('servermock')(config.mock)
+
+// 配置代理
+proxyTable: {
+  "/api": {
+    target: "http://localhost:8880", // 指向mock的server
+    pathRewrite: {"^/api" : ""},
+    changeOrigin: true,
+    secure: false
+  },
+}
+
+// 对应目录
+// getabc.js -> 项目启动目录/mock/getabc.js
+
+
+```
 
 ## Plugin
 
@@ -120,9 +166,9 @@ servermock plugin -i https://github.com/shalles/synctest.git
 
 #### Plugin List
 
-1. [ **mock** ](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md)  `default`<br>
-2. [ **pagemock** ](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md)  `default`<br>
-3. [ **synctest** ](https://github.com/shalles/synctest/blob/master/README.md)  `need install`<br>
+1. [ **mock配置请参考**](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md)  `default`<br>
+2. [ **pagemock配置请参考** ](https://github.com/shalles/servermock/blob/master/plugins/content/pagemock/README.md)  `default`<br>
+3. [ **synctest配置请参考** ](https://github.com/shalles/synctest/blob/master/README.md)  `need install`<br>
 4. ...
 
 #### How To
