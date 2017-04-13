@@ -6,7 +6,7 @@
 $ sudo npm install servermock -g
 
 ```
-** or **
+**or**
 
 ```shell
 # as a node_module like require('servermock')(config)
@@ -16,7 +16,7 @@ $ npm install servermock -save //--save-dev
 
 ## Usage
 
-** start servermock **
+**start servermock**
 
 ```shell
 $ servermock start # or sm start
@@ -28,7 +28,7 @@ $ servermock start # or sm start
 
 ```
 
-** servermock init **
+**servermock init**
 
 ```shell
 $ servermock init  # or sm init
@@ -36,7 +36,7 @@ $ servermock init  # or sm init
 
 ```
 
-** servermock plugin **
+**servermock plugin**
 
 ```shell
 $ servermock plugin # or sm plugin
@@ -147,7 +147,8 @@ proxyTable: {
 
 // 对应目录
 // getabc.js -> 项目启动目录/mock/getabc.js
-
+// getabc.json -> 项目启动目录/mock/getabc.json
+// getabc.mjson -> 项目启动目录/mock/getabc.mjson
 
 ```
 
