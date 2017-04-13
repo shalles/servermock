@@ -41,7 +41,7 @@
 #### .js
 
 ```js
-function(req, res){
+function(req, res, require){
     // 提供了下面数据可供更加动态的数据mock
 
     // req.headers: { 
@@ -81,7 +81,7 @@ function(req, res){
     // res.statusCode = 302;
     // res.setHeader("Location", "http://127.0.0.1:8088" + req.url);
     // res.end();
-
+    console.log(require('fs'))
     console.log("req:", req);
 
     var data = {"errno":0,"data":[1,2,3,4,5,6,7,8,'a','b','c','d']};
