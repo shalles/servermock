@@ -103,7 +103,7 @@ start root path/sm.config
 3. `protocol`:启动server服务的协议支持`http/https`， 当为https是需要传入key和cert两个证书文件;<br>
 4. main提供的话会在start的时候`启动浏览器打开服务`，不提供则不打开;
 
-更多配置使用请看对应插件 
+#### 更多配置使用请看对应插件 
 
 [ **mock 配置请参考readme** ](https://github.com/shalles/servermock/blob/master/plugins/router/mock/README.md)   
 

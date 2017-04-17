@@ -109,7 +109,7 @@ MockData.prototype = {
                     //data = new vm.script(data[0]);
                     // 将分解好的url给mock用户*.js 
                     // 只能拦截所起服务下的mock 跨域的不能拦截需用fiddler或charles之类的代理到servermock所起服务下
-                    req.wwwurl = url.parse(servConfig.protocol + '://' + req.headers.host + req.url);
+                    req.parseUrl = req.wwwurl = url.parse(servConfig.protocol + '://' + req.headers.host + req.url);
                     var qstr = req.wwwurl.query ? qs.parse(req.wwwurl.query) : {},
                         query = {};
                     for(var i in qstr){
@@ -120,7 +120,7 @@ MockData.prototype = {
                     }
                     // utils.log(utils.chalk.green("qstr: ", qstr));
                     //extname === 'html' && utils.log(utils.chalk.green(req, '\n\n\n\n', req.wwwurl))
-                    req.wwwurl.queryObj = query;
+                    req.queryObj = req.wwwurl.queryObj = query;
                     //utils.log(utils.chalk.green('----------mock js func:\n', data.cnt.toString()));
                     vm.runInThisContext('(' + data.cnt + ')')(req, res, require);
                     break;

@@ -58,7 +58,7 @@ function(req, res, require){
     //    'ra-sid': 'D397FW#5-20150603-021623-afsadf-asfew' 
     // }
     // req.method: 'GET',
-    // req.wwwurl: { 
+    // req.parseUrl: { 
     //     protocol: 'http:',
     //     slashes: true,
     //     auth: null,
@@ -71,6 +71,7 @@ function(req, res, require){
     //     pathname: '/api/placesuggestion',
     //     path: '/api/placesuggestion?city=%E5%8C%97%E4%&query=d',
     //     href: 'http://127.0.0.1:8080/api/placesuggestion?city=%E5%8C%97%E4%&query=d' 
+    //     // = req.queryObj
     //     queryObj:{ 
     //         city: '北京市',
     //         query: 'd' 
